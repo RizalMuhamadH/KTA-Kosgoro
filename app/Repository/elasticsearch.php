@@ -37,4 +37,9 @@ class Elasticsearch {
     {
         return $this->client->get($params);
     }
+
+    public function bulk($params)
+    {
+        $this->client->bulk($params);
+    }
 }
