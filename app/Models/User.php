@@ -17,10 +17,27 @@ class User extends Authenticatable
      *
      * @var string[]
      */
+    protected $table = 'members';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'name',
         'email',
+        'phone',
+        'nik',
+        'no_member',
+        'photo',
+        'address',
+        'province_id',
+        'district_id',
+        'sub_district_id',
+        'village_id',
+        'post_code',
+        'qr_code',
+        'status',
+        'token',
         'password',
+        'otp_used',
+        'position_id'
     ];
 
     /**
@@ -31,6 +48,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'token',
     ];
 
     /**

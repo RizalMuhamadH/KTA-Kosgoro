@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+// use DatabaseSeeders\VillagesSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,5 +15,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        $this->call(ProvinceSeeder::class);
+        $this->call(DistrictSeeder::class);
+        $this->call(SubDistrictSeeder::class);
+        $this->call(VillagesSeeder::class);
+        $this->call(PositionSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

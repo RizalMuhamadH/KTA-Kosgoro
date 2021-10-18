@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::post('/member/login',[MemberController::class,'login'])->name('member_login');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('/members')->name('members.')->group(function () {
+    Route::get('/',[MemberController::class, 'detail'])->name('detail');
 });
+Route::post('/generate_otp',[MemberController::class,'generate_otp'])->name('generate_otp');

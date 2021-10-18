@@ -17,7 +17,6 @@ class CreateMembersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('password');
             $table->string('phone')->unique();
             $table->string('nik')->unique();
             $table->string('no_member')->unique();
@@ -26,11 +25,13 @@ class CreateMembersTable extends Migration
             $table->unsignedBigInteger('province_id');
             $table->unsignedBigInteger('district_id');
             $table->unsignedBigInteger('sub_district_id');
-            $table->unsignedInteger('village_id');
+            $table->unsignedBigInteger('village_id');
             $table->string('post_code');
-            $table->string('qrcode');
+            $table->string('qrcode')->nullable();
             $table->string('status');
-            $table->string('token');
+            $table->string('token')->nullable();
+            $table->string('password')->nullable();
+            $table->integer('otp_used')->default(0);
             $table->unsignedBigInteger('position_id');
             $table->timestamps();
 
@@ -38,7 +39,7 @@ class CreateMembersTable extends Migration
             $table->foreign('district_id')->references('id')->on('districts');
             $table->foreign('sub_district_id')->references('id')->on('sub_districts');
             $table->foreign('position_id')->references('id')->on('positions');
-            $table->foreign('village')->references('id')->on('villages');
+            $table->foreign('village_id')->references('id')->on('villages');
         });
     }
 
