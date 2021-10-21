@@ -26,6 +26,7 @@ class User extends Authenticatable
         'nik',
         'no_member',
         'photo',
+        'id_card_photo',
         'address',
         'province_id',
         'district_id',
@@ -37,7 +38,8 @@ class User extends Authenticatable
         'token',
         'password',
         'otp_used',
-        'position_id'
+        'position_id',
+        'active'
     ];
 
     /**
@@ -59,4 +61,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function Province(){
+        return $this->hasOne(Provinces::class,'id','province_id');
+    }
+
+    public function District(){
+        return $this->hasOne(Districts::class,'id','district_id');
+    }
+
+    public function SubDistrict(){
+        return $this->hasOne(SubDistricts::class,'id','sub_district_id');
+    }
+
+    public function Village(){
+        return $this->hasOne(Villages::class,'id','village_id');
+    }
+
+    public function Position(){
+        return $this->hasOne(Position::class,'id','position_id');
+    }
 }

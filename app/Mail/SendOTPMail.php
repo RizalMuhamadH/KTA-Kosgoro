@@ -2,12 +2,13 @@
 
 namespace App\Mail;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class OTPMail extends Mailable
+class SendOTPMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -30,12 +31,12 @@ class OTPMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.otpmail')
-                ->subject("OTP Login Kasgoro ".$this->tmp_user->name)
-                ->from('superadmkasgoro@gmail.com','Sys Admin Kasogoro')
-                ->with([
-                    'user'      =>  $this->tmp_user,
-                    'otp'       =>  $this->otp
-                ]);
+        return $this->markdown('emails.otp')
+            ->subject("OTP Login Kasgoro ".$this->tmp_user->name." ".Carbon::now()->timezone('Asia/Jakarta'))
+            ->from('superadmkasgoro@gmail.com','Sys Admin Kasogoro')
+            ->with([
+                'user'      =>  $this->tmp_user,
+                'otp'       =>  $this->otp
+            ]);;
     }
 }
