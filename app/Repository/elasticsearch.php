@@ -9,7 +9,7 @@ class Elasticsearch {
     public function __construct()
     {
         $this->client = ClientBuilder::create()->setHosts([
-            env("ELASTICSEARCH_HOSTS", "")
+            env("ELASTICSEARCH_HOST", "")
         ])->build();
     }
 

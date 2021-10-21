@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\SendOTPMail;
 use App\Models\Position;
 use App\Models\User;
+use App\Repository\Elasticsearch;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,14 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class MemberController extends Controller
 {
+
+    private $repository;
+
+    public function __construct(Elasticsearch $repository)
+    {
+        $this->repository = $repository;
+    }
+    
     public function index(){
         return view('Members.index', [
             'positions'    => Position::all()
@@ -91,7 +100,6 @@ class MemberController extends Controller
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'otp_used' => 0, 'active' => 1])){
                 $tmp_user = User::where('email',$request->email)->first();
                 $tmp_user->otp_used = 1;
-                $tmp_user->token = Str::random(10);
                 $tmp_user->save();
                 return redirect('/home');
             }else{
@@ -101,7 +109,6 @@ class MemberController extends Controller
             if(Auth::attempt(['phone' => $request->phone_number, 'password' => $request->password, 'otp_used' => 0, 'active' => 1])){
                 $tmp_user = User::where('phone',$request->phone_number)->first();
                 $tmp_user->otp_used = 1;
-                $tmp_user->token = Str::random(10);
                 $tmp_user->save();
                 return redirect('/home');
             }else{
@@ -144,6 +151,7 @@ class MemberController extends Controller
         $user->district_id      = $request->district;
         $user->sub_district_id  = $request->sub_district;
         $user->village_id       = $request->village;
+        $user->token            = (string) Str::uuid();
         $user->qrcode           = "QR Code";
         $user->status           = 0;
         $user->position_id      = $request->position;
@@ -166,6 +174,19 @@ class MemberController extends Controller
             $tmp_user->qrcode = $qr_code;
             $tmp_user->no_member = $no_member;
             $tmp_user->save();
+
+            $params = [
+                'index' => 'members',
+                'id'    => $tmp_user->no_member,
+                'body'  => [
+                    'email'     => $tmp_user->email,
+                    'phone'     => $tmp_user->phone,
+                    'nik'       => $tmp_user->nik,
+                    'qrcode'    => $tmp_user->qrcode
+                ]
+            ];
+            $es = $this->repository->create($params);
+
             echo json_encode($result = array([
                 "message"   => "Member Berhasil Ditambahkan",
                 "type"      => "success",
