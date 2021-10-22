@@ -47,17 +47,22 @@ class MemberController extends Controller
             echo json_encode($tmp);
         }else{
             if($tmp != null){
-                echo json_encode([
+                
+                $response = [
                     'code'  =>  200,
                     'text'  =>  "Member Ditemukan",
                     'data'  =>  $tmp
-                ]);
+                ];
+                return response($response, 200);
             }else{
-                echo json_encode([
+                $response = [
                     'code'  =>  400,
                     'text'  =>  "Member Tidak Ditemukan",
                     'data'  =>  $tmp
-                ]);
+                ];
+
+
+                return response($response, 200);
             }
             
         }
@@ -109,11 +114,11 @@ class MemberController extends Controller
             $tmp_user->save();
             Mail::to($tmp_user->email)->send(new SendOTPMail($tmp_user, $otp_before_hash));
             $result = [
-                'code'      =>  '200',
+                'code'      =>  200,
                 'type'      =>  'success',
                 'message'   =>  'Silahkan Cek Email Anda',
             ];
-            echo json_encode($result);
+            return response($result, 200);
         }else{
             if($request->email != null){
                 $new_user = new User();
@@ -127,18 +132,18 @@ class MemberController extends Controller
                 $new_user->save();
                 Mail::to($new_user->email)->send(new SendOTPMail($new_user, $otp_before_hash));
                 $result = [
-                    'code'      =>  '200',
+                    'code'      =>  200,
                     'type'      =>  'success',
                     'message'   =>  'Silahkan Cek Email Anda',
                 ];
-                echo json_encode($result);
+                return response($result, 200);
             }
             else{
                 $result = [
-                    'code'  =>  '400',
+                    'code'  =>  400,
                     'type'  =>  'error',
                 ];
-                echo json_encode($result);
+                return response($result, 200);
             }
         }
     }
@@ -153,12 +158,13 @@ class MemberController extends Controller
                 $tmp_user->otp_used = 1;
                 $tmp_user->save();
                 if($request->api){
-                    return json_encode([
+                    $response = [
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
                         'code'          => 200,
                         'no_member'     => $tmp_user->no_member  
-                    ]);
+                    ];
+                    return response($response, 200);
                     die;
                 }
                 return redirect('/home');
@@ -171,12 +177,13 @@ class MemberController extends Controller
                 $tmp_user->otp_used = 1;
                 $tmp_user->save();
                 if($request->api){
-                    return json_encode([
+                    $response = [
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
                         'code'          => 200,
                         'no_member'     => $tmp_user->no_member  
-                    ]);
+                    ];
+                    return response($response, 200);
                 }
                 return redirect('/home');
             }else{
@@ -222,10 +229,12 @@ class MemberController extends Controller
 
             $validator = Validator::make($request->all(),$rules);
             if($validator->fails()){
-                    return Response([
+                    $response = [
                         'code'  =>  500,
                         'message'   =>  $validator->errors()
-                    ]);
+                    ];
+
+                    return response($response, 200);
             }
         }
 
@@ -277,27 +286,31 @@ class MemberController extends Controller
             
             Mail::to($tmp_user->email)->send(new RegisteredMember($tmp_user));
             if(!$request->api){
-                echo json_encode($result = array([
+                $response = [
                     "message"   => "Member Berhasil Ditambahkan",
                     "type"      => "success",
-                    "code"    => true]));
+                    "code"    => true];
+                    return response($response, 200);
             }else{
-                return Response([
+                $response = [
                     "message"   => "Member Berhasil Ditambahkan",
                     "type"      => "success",
-                    "code"    => 200]);
+                    "code"    => 200];
+                    return response($response, 200);
             }
         }else{
             if(!$request->api){
-                echo json_encode($result = array([
+                $response = [
                     "message"   => "Member Gagal Ditambahkan",
                     "type"      => "success",
-                    "code"    => true]));
+                    "code"    => true];
+                    return response($response, 200);
             }else{
-                return Response([
+                $response = [
                     "message"   => "Member Gagal Ditambahkan",
                     "type"      => "error",
-                    "code"    => 500]);
+                    "code"    => 500];
+                    return response($response, 200);
             }
         }
     }
@@ -336,10 +349,11 @@ class MemberController extends Controller
 
             $validator = Validator::make($request->all(),$rules);
             if($validator->fails()){
-                    return Response([
+                    $response = [
                         'code'  =>  500,
                         'message'   =>  $validator->errors()
-                    ]);
+                    ];
+                    return response($response, 200);
             }
         }
 
@@ -404,27 +418,31 @@ class MemberController extends Controller
             }
 
             if(!$request->api){
-                echo json_encode($result = array([
+                $response = [
                     "message"   => "Member Berhasil Diupdate",
                     "type"      => "success",
-                    "code"    => true]));
+                    "code"    => true];
+                    return response($response, 200);
             }else{
-                return Response([
+                $response = [
                     "message"   => "Member Berhasil Diupdate",
                     "type"      => "success",
-                    "code"    => 200]);
+                    "code"    => 200];
+                    return response($response, 200);
             }
         }else{
             if(!$request->api){
-                echo json_encode($result = array([
+                $response = [
                     "message"   => "Member Gagal Diupdate",
                     "type"      => "error",
-                    "code"    => true]));
+                    "code"    => 500];
+                    return response($response, 200);
             }else{
-                return Response([
+                $response = [
                     "message"   => "Member Gagal Diupdate",
                     "type"      => "error",
-                    "code"    => 500]);
+                    "code"    => 500];
+                    return response($response, 200);
             }
         }
     }
@@ -527,7 +545,7 @@ class MemberController extends Controller
     public function check_status(Request $request){
         $user = User::where('email',$request->email)->first();
         if($user != null){
-            return json_encode([
+            $response = [
                 'code'      =>  200,
                 'data'      =>  [
                     'status'    =>  $user->status,
@@ -535,13 +553,15 @@ class MemberController extends Controller
                     'no_member' =>  $user->no_member
                 ],
                 'message'   =>  "Data member Ditemukan"
-            ]);
+            ];
+            return response($response, 200);
         }else{
-            return json_encode([
+            $response = [
                 'code'      =>  500,
                 'data'      =>  null,
                 'message'   =>  "Data member Tidak Ditemukan"
-            ]);
+            ];
+            return response($response, 200);
         }
     }
 }
