@@ -11,5 +11,5 @@ Jaga keamanan akun Anda dengan tidak membagikan OTP kepada siapa pun, termasuk a
 Terima kasih telah menggunakan aplikasi Kosgoro
 
 Regards,<br>
-{{ config('app.name') }}
+Admin {{ config('app.name') }}
 @endcomponent

@@ -22,3 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/create/member',[MemberController::class,'store']);
+Route::post('/generate_otp',[MemberController::class,'generate_otp']);
+Route::post('/login/member',[MemberController::class,'login']);
+Route::post('/update/member',[MemberController::class,'update']);
+Route::get('/detail/member',[MemberController::class,'detail']);

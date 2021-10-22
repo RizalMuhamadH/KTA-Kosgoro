@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BlockMember;
+use App\Mail\RegisteredMember;
 use App\Mail\SendOTPMail;
+use App\Mail\UnblockMember;
+use App\Mail\VerifiedMember;
 use App\Models\Position;
 use App\Models\User;
 use App\Repository\Elasticsearch;
@@ -34,9 +38,28 @@ class MemberController extends Controller
     }
 
     public function detail(Request $request){
-        $tmp = User::where('id',$request->id)->with(['Province','District','SubDistrict','Village','Position'])->first();
+        if($request->api){
+            $tmp = User::where('email',$request->email)->with(['Province','District','SubDistrict','Village','Position'])->first();
+        }else{
+            $tmp = User::where('id',$request->id)->with(['Province','District','SubDistrict','Village','Position'])->first();
+        }
         if(isset($request->cms)){
             echo json_encode($tmp);
+        }else{
+            if($tmp != null){
+                echo json_encode([
+                    'code'  =>  200,
+                    'text'  =>  "Member Ditemukan",
+                    'data'  =>  $tmp
+                ]);
+            }else{
+                echo json_encode([
+                    'code'  =>  400,
+                    'text'  =>  "Member Tidak Ditemukan",
+                    'data'  =>  $tmp
+                ]);
+            }
+            
         }
     }
 
@@ -85,14 +108,39 @@ class MemberController extends Controller
             $tmp_user->otp_used = 0;
             $tmp_user->save();
             Mail::to($tmp_user->email)->send(new SendOTPMail($tmp_user, $otp_before_hash));
-        }else{
             $result = [
-                'code'  =>  '404',
-                'type'  =>  'error',
+                'code'      =>  '200',
+                'type'      =>  'success',
+                'message'   =>  'Silahkan Cek Email Anda',
             ];
             echo json_encode($result);
-        }
+        }else{
+            if($request->email != null){
+                $new_user = new User();
+                $new_user->name = $request->email;
+                $new_user->email = $request->email;
+                $new_user->save();
 
+                $otp_before_hash = Str::random(6);
+                $new_user->password = Hash::make($otp_before_hash);
+                $new_user->otp_used = 0;
+                $new_user->save();
+                Mail::to($new_user->email)->send(new SendOTPMail($new_user, $otp_before_hash));
+                $result = [
+                    'code'      =>  '200',
+                    'type'      =>  'success',
+                    'message'   =>  'Silahkan Cek Email Anda',
+                ];
+                echo json_encode($result);
+            }
+            else{
+                $result = [
+                    'code'  =>  '400',
+                    'type'  =>  'error',
+                ];
+                echo json_encode($result);
+            }
+        }
     }
 
     public function login(Request $request){
@@ -104,6 +152,15 @@ class MemberController extends Controller
                 $tmp_user = User::where('email',$request->email)->first();
                 $tmp_user->otp_used = 1;
                 $tmp_user->save();
+                if($request->api){
+                    return json_encode([
+                        'token'         => $tmp_user->token,
+                        'status'        => $tmp_user->status,
+                        'code'          => 200,
+                        'no_member'     => $tmp_user->no_member  
+                    ]);
+                    die;
+                }
                 return redirect('/home');
             }else{
                 return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
@@ -113,6 +170,14 @@ class MemberController extends Controller
                 $tmp_user = User::where('phone',$request->phone_number)->first();
                 $tmp_user->otp_used = 1;
                 $tmp_user->save();
+                if($request->api){
+                    return json_encode([
+                        'token'         => $tmp_user->token,
+                        'status'        => $tmp_user->status,
+                        'code'          => 200,
+                        'no_member'     => $tmp_user->no_member  
+                    ]);
+                }
                 return redirect('/home');
             }else{
                 return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
@@ -141,8 +206,7 @@ class MemberController extends Controller
             ]);
         }else{
             $rules = array(
-                'name'          => 'required',
-                'email'         =>  'required|email|unique:members,email',
+                'name'          =>  'required',
                 'phone'         =>  'required|min:10|max:13|unique:members,phone',
                 'nik'           =>  'required|min:16|max:16|unique:members,nik',
                 'province'      =>  'required',
@@ -165,7 +229,11 @@ class MemberController extends Controller
             }
         }
 
-        $user = new User();
+        if(isset($request->api)){
+            $user =  User::where('email',$request->email)->first();
+        }else{
+            $user = new User();
+        }
         $user->name             = $request->name;
         $user->email            = $request->email;
         $user->phone            = $request->phone;
@@ -182,7 +250,7 @@ class MemberController extends Controller
         $user->token            = (string) Str::orderedUuid();
         $user->qrcode           = "QR Code";
         $user->status           = 0;
-        $user->position_id      = $request->position;
+        $user->position_id      = $request->api ? '3' : $request->position;
 
         $result = $user->save();
         if($result){
@@ -209,21 +277,23 @@ class MemberController extends Controller
                 'index' => 'members',
                 'id'    => $tmp_user->no_member,
                 'body'  => [
-                    'no_member'     => $tmp_user->no_member,
+                    'no_member'     =>  $tmp_user->no_member,
                     'name'          =>  $newEncrypter->encrypt($tmp_user->name),
                     'email'         =>  $newEncrypter->encrypt( $tmp_user->email ),
                     'phone'         =>  $newEncrypter->encrypt( $tmp_user->phone ),
                     'nik'           =>  $newEncrypter->encrypt( $tmp_user->nik ),
-                    'position'      =>  $newEncrypter->encrypt($tmp_user->Position['name']),
-                    'province'      =>  $newEncrypter->encrypt($tmp_user->Province['name']),
-                    'district'      =>  $newEncrypter->encrypt($tmp_user->District['name']),
-                    'sub_district'  =>  $newEncrypter->encrypt($tmp_user->SubDistrict['name']),
-                    'village'       =>  $newEncrypter->encrypt($tmp_user->Village['name']),
-                    'qrcode'        =>  $tmp_user->qrcode
+                    'position'      =>  $newEncrypter->encrypt( $tmp_user->Position['name']),
+                    'province'      =>  $newEncrypter->encrypt( $tmp_user->Province['name']),
+                    'district'      =>  $newEncrypter->encrypt( $tmp_user->District['name']),
+                    'sub_district'  =>  $newEncrypter->encrypt( $tmp_user->SubDistrict['name']),
+                    'village'       =>  $newEncrypter->encrypt( $tmp_user->Village['name']),
+                    'qrcode'        =>  $tmp_user->qrcode,
+                    'address'       =>  $newEncrypter->encrypt( $tmp_user->address ),
+                    'post_code'     =>  $newEncrypter->encrypt( $tmp_user->post_code ),
                 ]
             ];
             $es = $this->repository->create($params);
-
+            Mail::to($tmp_user->email)->send(new RegisteredMember($tmp_user));
             if(!$request->api){
                 echo json_encode($result = array([
                     "message"   => "Member Berhasil Ditambahkan",
@@ -267,12 +337,12 @@ class MemberController extends Controller
                 'position'      =>  'required',
             ]);
         }else{
+            $user = User::where('email',$request->email)->first();
             $rules = array(
-                'id'            =>  'required',
                 'name'          =>  'required',
-                'email'         =>  'required|email|unique:members,email,'.$request->id,
-                'phone'         =>  'required|min:10|max:13|unique:members,phone,'.$request->id,
-                'nik'           =>  'required|min:16|max:16|unique:members,nik,'.$request->id,
+                'email'         =>  'required|email|unique:members,email,'.$user->id,
+                'phone'         =>  'required|min:10|max:13|unique:members,phone,'.$user->id,
+                'nik'           =>  'required|min:16|max:16|unique:members,nik,'.$user->id,
                 'province'      =>  'required',
                 'district'      =>  'required',
                 'sub_district'  =>  'required',
@@ -291,7 +361,9 @@ class MemberController extends Controller
             }
         }
 
-        $user = User::find($request->id);
+        if(!isset($request->api)){
+            $user = User::find($request->id);   
+        }
         $user->name             = $request->name;
         $user->email            = $request->email;
         $user->phone            = $request->phone;
@@ -323,10 +395,21 @@ class MemberController extends Controller
                 'index' => 'members',
                 'id'    => $user->no_member,
                 'body'  => [
-                    'email'     => $newEncrypter->encrypt( $user->email ),
-                    'phone'     => $newEncrypter->encrypt( $user->phone ),
-                    'nik'       => $newEncrypter->encrypt( $user->nik ),
-                    'qrcode'    => $user->qrcode
+                    'doc' => [
+                        'no_member'     =>  $user->no_member,
+                        'name'          =>  $newEncrypter->encrypt($user->name),
+                        'email'         =>  $newEncrypter->encrypt( $user->email ),
+                        'phone'         =>  $newEncrypter->encrypt( $user->phone ),
+                        'nik'           =>  $newEncrypter->encrypt( $user->nik ),
+                        'position'      =>  $newEncrypter->encrypt( $user->Position['name']),
+                        'province'      =>  $newEncrypter->encrypt( $user->Province['name']),
+                        'district'      =>  $newEncrypter->encrypt( $user->District['name']),
+                        'sub_district'  =>  $newEncrypter->encrypt( $user->SubDistrict['name']),
+                        'village'       =>  $newEncrypter->encrypt( $user->Village['name']),
+                        'qrcode'        =>  $user->qrcode,
+                        'address'       =>  $newEncrypter->encrypt( $user->address ),
+                        'post_code'     =>  $newEncrypter->encrypt( $user->post_code ),
+                    ]
                 ]
             ];
             $es = $this->repository->update($params);
@@ -360,23 +443,27 @@ class MemberController extends Controller
     public function change_status(Request $request){
         $type = "";
         $user = User::find($request->id);
-
         $request->validate([
             'id'            =>  'required',
             'status'      =>  'required',
         ]);
         if($request->status == "1"){
+            if($user->no_member == "null"){
+                $user->no_member = date("Y.dm.").$user->id;
+            }
             $type = "Diverifikasi";
             $user->status = 1;
+            Mail::to($user->email)->send(new VerifiedMember($user));
         }else if($request->status == "2"){
             $type = "Diblock";
             $user->status = 2;
             $user->active = 0;
+            Mail::to($user->email)->send(new BlockMember($user));
         }else if($request->status == "3"){
             $type = "Unblock";
             $user->status = 1;
+            Mail::to($user->email)->send(new UnblockMember($user));
         }
-
 
         $result = $user->save();
         if($result){
