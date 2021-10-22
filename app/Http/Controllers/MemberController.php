@@ -196,7 +196,7 @@ class MemberController extends Controller
             QrCode::format('svg')->generate(route('members.detail',['id'   => $user->id]), public_path('storage/data_member/'.$user->id.'/'.$qr_code));
             $no_member = date("Y.dm").".".$user->id;
 
-            $tmp_user = User::find($user->id);
+            $tmp_user = User::where('id', $user->id)->with(['Position','Province','District','SubDistrict','Village'])->first();
             $tmp_user->photo = $photo;
             $tmp_user->id_card_photo = $ktp;
             $tmp_user->qrcode = $qr_code;
@@ -209,10 +209,17 @@ class MemberController extends Controller
                 'index' => 'members',
                 'id'    => $tmp_user->no_member,
                 'body'  => [
-                    'email'     => $newEncrypter->encrypt( $tmp_user->email ),
-                    'phone'     => $newEncrypter->encrypt( $tmp_user->phone ),
-                    'nik'       => $newEncrypter->encrypt( $tmp_user->nik ),
-                    'qrcode'    => $tmp_user->qrcode
+                    'no_member'     => $tmp_user->no_member,
+                    'name'          =>  $newEncrypter->encrypt($tmp_user->name),
+                    'email'         =>  $newEncrypter->encrypt( $tmp_user->email ),
+                    'phone'         =>  $newEncrypter->encrypt( $tmp_user->phone ),
+                    'nik'           =>  $newEncrypter->encrypt( $tmp_user->nik ),
+                    'position'      =>  $newEncrypter->encrypt($tmp_user->Position['name']),
+                    'province'      =>  $newEncrypter->encrypt($tmp_user->Province['name']),
+                    'district'      =>  $newEncrypter->encrypt($tmp_user->District['name']),
+                    'sub_district'  =>  $newEncrypter->encrypt($tmp_user->SubDistrict['name']),
+                    'village'       =>  $newEncrypter->encrypt($tmp_user->Village['name']),
+                    'qrcode'        =>  $tmp_user->qrcode
                 ]
             ];
             $es = $this->repository->create($params);
