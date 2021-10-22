@@ -8,10 +8,13 @@ use App\Models\User;
 use App\Repository\Elasticsearch;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class MemberController extends Controller
@@ -23,7 +26,7 @@ class MemberController extends Controller
     {
         $this->repository = $repository;
     }
-    
+
     public function index(){
         return view('Members.index', [
             'positions'    => Position::all()
@@ -120,22 +123,47 @@ class MemberController extends Controller
     }
 
     public function store(Request $request){
-        $request->validate([
-            'name'          => 'required',
-            'email'         =>  'required|email|unique:members,email',
-            'phone'         =>  'required|min:10|max:13|unique:members,phone',
-            'nik'           =>  'required|min:16|max:16|unique:members,nik',
-            'province'      =>  'required',
-            'district'      =>  'required',
-            'sub_district'  =>  'required',
-            'village'       =>  'required',
-            'post_code'     =>  'required',
-            'address'       =>  'required',
-            'position'      =>  'required',
-            'photo'         =>  'required|max:1024|mimes:jpg,jpeg,png',
-            'id_card'       =>  'required|max:1024|mimes:jpg,jpeg,png',
-        ]);
+        if(!isset($request->api)){
+            $request->validate([
+                'name'          => 'required',
+                'email'         =>  'required|email|unique:members,email',
+                'phone'         =>  'required|min:10|max:13|unique:members,phone',
+                'nik'           =>  'required|min:16|max:16|unique:members,nik',
+                'province'      =>  'required',
+                'district'      =>  'required',
+                'sub_district'  =>  'required',
+                'village'       =>  'required',
+                'post_code'     =>  'required',
+                'address'       =>  'required',
+                'position'      =>  'required',
+                'photo'         =>  'required|max:1024|mimes:jpg,jpeg,png',
+                'id_card'       =>  'required|max:1024|mimes:jpg,jpeg,png',
+            ]);
+        }else{
+            $rules = array(
+                'name'          => 'required',
+                'email'         =>  'required|email|unique:members,email',
+                'phone'         =>  'required|min:10|max:13|unique:members,phone',
+                'nik'           =>  'required|min:16|max:16|unique:members,nik',
+                'province'      =>  'required',
+                'district'      =>  'required',
+                'sub_district'  =>  'required',
+                'village'       =>  'required',
+                'post_code'     =>  'required',
+                'address'       =>  'required',
+                'position'      =>  'required',
+                'photo'         =>  'required|max:1024|mimes:jpg,jpeg,png',
+                'id_card'       =>  'required|max:1024|mimes:jpg,jpeg,png',
+            );
 
+            $validator = Validator::make($request->all(),$rules);
+            if($validator->fails()){
+                    return Response([
+                        'code'  =>  500,
+                        'message'   =>  $validator->errors()
+                    ]);
+            }
+        }
 
         $user = new User();
         $user->name             = $request->name;
@@ -151,7 +179,7 @@ class MemberController extends Controller
         $user->district_id      = $request->district;
         $user->sub_district_id  = $request->sub_district;
         $user->village_id       = $request->village;
-        $user->token            = (string) Str::uuid();
+        $user->token            = (string) Str::orderedUuid();
         $user->qrcode           = "QR Code";
         $user->status           = 0;
         $user->position_id      = $request->position;
@@ -175,46 +203,86 @@ class MemberController extends Controller
             $tmp_user->no_member = $no_member;
             $tmp_user->save();
 
+            $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$tmp_user->token), Config::get('app.cipher') );
+
             $params = [
                 'index' => 'members',
                 'id'    => $tmp_user->no_member,
                 'body'  => [
-                    'email'     => $tmp_user->email,
-                    'phone'     => $tmp_user->phone,
-                    'nik'       => $tmp_user->nik,
+                    'email'     => $newEncrypter->encrypt( $tmp_user->email ),
+                    'phone'     => $newEncrypter->encrypt( $tmp_user->phone ),
+                    'nik'       => $newEncrypter->encrypt( $tmp_user->nik ),
                     'qrcode'    => $tmp_user->qrcode
                 ]
             ];
             $es = $this->repository->create($params);
 
-            echo json_encode($result = array([
-                "message"   => "Member Berhasil Ditambahkan",
-                "type"      => "success",
-                "code"    => true]));
+            if(!$request->api){
+                echo json_encode($result = array([
+                    "message"   => "Member Berhasil Ditambahkan",
+                    "type"      => "success",
+                    "code"    => true]));
+            }else{
+                return Response([
+                    "message"   => "Member Berhasil Ditambahkan",
+                    "type"      => "success",
+                    "code"    => 200]);
+            }
         }else{
-            echo json_encode($result = array([
-                "message"   => "Member Gagal Ditambahkan",
-                "type"      => "error",
-                "code"    => false]));
+            if(!$request->api){
+                echo json_encode($result = array([
+                    "message"   => "Member Gagal Ditambahkan",
+                    "type"      => "success",
+                    "code"    => true]));
+            }else{
+                return Response([
+                    "message"   => "Member Gagal Ditambahkan",
+                    "type"      => "error",
+                    "code"    => 500]);
+            }
         }
     }
 
     public function update(Request $request){
-        $request->validate([
-            'id'            =>  'required',
-            'name'          =>  'required',
-            'email'         =>  'required|email|unique:members,email,'.$request->id,
-            'phone'         =>  'required|min:10|max:13|unique:members,phone,'.$request->id,
-            'nik'           =>  'required|min:16|max:16|unique:members,nik,'.$request->id,
-            'province'      =>  'required',
-            'district'      =>  'required',
-            'sub_district'  =>  'required',
-            'village'       =>  'required',
-            'post_code'     =>  'required',
-            'address'       =>  'required',
-            'position'      =>  'required',
-        ]);
+        if(!isset($request->api)){
+            $request->validate([
+                'id'            =>  'required',
+                'name'          =>  'required',
+                'email'         =>  'required|email|unique:members,email,'.$request->id,
+                'phone'         =>  'required|min:10|max:13|unique:members,phone,'.$request->id,
+                'nik'           =>  'required|min:16|max:16|unique:members,nik,'.$request->id,
+                'province'      =>  'required',
+                'district'      =>  'required',
+                'sub_district'  =>  'required',
+                'village'       =>  'required',
+                'post_code'     =>  'required',
+                'address'       =>  'required',
+                'position'      =>  'required',
+            ]);
+        }else{
+            $rules = array(
+                'id'            =>  'required',
+                'name'          =>  'required',
+                'email'         =>  'required|email|unique:members,email,'.$request->id,
+                'phone'         =>  'required|min:10|max:13|unique:members,phone,'.$request->id,
+                'nik'           =>  'required|min:16|max:16|unique:members,nik,'.$request->id,
+                'province'      =>  'required',
+                'district'      =>  'required',
+                'sub_district'  =>  'required',
+                'village'       =>  'required',
+                'post_code'     =>  'required',
+                'address'       =>  'required',
+                'position'      =>  'required',
+            );
 
+            $validator = Validator::make($request->all(),$rules);
+            if($validator->fails()){
+                    return Response([
+                        'code'  =>  500,
+                        'message'   =>  $validator->errors()
+                    ]);
+            }
+        }
 
         $user = User::find($request->id);
         $user->name             = $request->name;
@@ -241,22 +309,49 @@ class MemberController extends Controller
         $user->position_id      = $request->position;
 
         $result = $user->save();
+        $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$user->token), Config::get('app.cipher') );
+
         if($result){
-            echo json_encode($result = array([
-                "message"   => "Member Berhasil Dirubah",
-                "type"      => "success",
-                "code"    => true]));
+            $params = [
+                'index' => 'members',
+                'id'    => $user->no_member,
+                'body'  => [
+                    'email'     => $newEncrypter->encrypt( $user->email ),
+                    'phone'     => $newEncrypter->encrypt( $user->phone ),
+                    'nik'       => $newEncrypter->encrypt( $user->nik ),
+                    'qrcode'    => $user->qrcode
+                ]
+            ];
+            $es = $this->repository->update($params);
+
+            if(!$request->api){
+                echo json_encode($result = array([
+                    "message"   => "Member Berhasil Diupdate",
+                    "type"      => "success",
+                    "code"    => true]));
+            }else{
+                return Response([
+                    "message"   => "Member Berhasil Diupdate",
+                    "type"      => "success",
+                    "code"    => 200]);
+            }
         }else{
-            echo json_encode($result = array([
-                "message"   => "Member Gagal Dirubah",
-                "type"      => "error",
-                "code"    => false]));
+            if(!$request->api){
+                echo json_encode($result = array([
+                    "message"   => "Member Gagal Diupdate",
+                    "type"      => "error",
+                    "code"    => true]));
+            }else{
+                return Response([
+                    "message"   => "Member Gagal Diupdate",
+                    "type"      => "error",
+                    "code"    => 500]);
+            }
         }
     }
 
     public function change_status(Request $request){
         $type = "";
-        $status = "";
         $user = User::find($request->id);
 
         $request->validate([
