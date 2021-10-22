@@ -231,6 +231,9 @@ class MemberController extends Controller
 
         if(isset($request->api)){
             $user =  User::where('email',$request->email)->first();
+            if($user == null){
+                $user = new User();
+            }
         }else{
             $user = new User();
         }
