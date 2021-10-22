@@ -241,7 +241,7 @@ class MemberController extends Controller
         $user->email            = $request->email;
         $user->phone            = $request->phone;
         $user->nik              = $request->nik;
-        $user->no_member        = Str::random(6);
+        $user->no_member        = Str::random(12);
         $user->photo            = "Photo";
         $user->id_card_photo    = "Id Card Photo";
         $user->address          = $request->address;
@@ -257,47 +257,24 @@ class MemberController extends Controller
 
         $result = $user->save();
         if($result){
-            $photo = "Pas Photo ".$request->name.'.'.$request->file('photo')->extension();
+            $photo = "Pas Photo ".$request->name;
+            $photo = Str::slug($photo).'.'.$request->file('photo')->extension();
             $request->file('photo')->storeAs("data_member/".$user->id,$photo,'public');
 
-            $ktp = "KTP ".$request->name.'.'.$request->file('id_card')->extension();
+            $ktp = "KTP ".$request->name;
+            $ktp = Str::slug($ktp).'.'.$request->file('id_card')->extension();
             $request->file('id_card')->storeAs("data_member/".$user->id,$ktp,'public');
 
-            $qr_code = "QR Code ".$request->name.".svg";
+            $qr_code = "QR Code ".$request->name;
+            $qr_code = Str::slug($qr_code).".svg";
             QrCode::format('svg')->generate(route('members.detail',['id'   => $user->id]), public_path('storage/data_member/'.$user->id.'/'.$qr_code));
-            $no_member = date("Y.dm").".".$user->id;
 
             $tmp_user = User::where('id', $user->id)->with(['Position','Province','District','SubDistrict','Village'])->first();
             $tmp_user->photo = $photo;
             $tmp_user->id_card_photo = $ktp;
             $tmp_user->qrcode = $qr_code;
-            $tmp_user->no_member = $no_member;
             $tmp_user->save();
-
-            $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$tmp_user->token), Config::get('app.cipher') );
-
-            $params = [
-                'index' => 'members',
-                'id'    => $tmp_user->no_member,
-                'body'  => [
-                    'no_member'     =>  $tmp_user->no_member,
-                    'name'          =>  $newEncrypter->encrypt($tmp_user->name),
-                    'email'         =>  $newEncrypter->encrypt( $tmp_user->email ),
-                    'phone'         =>  $newEncrypter->encrypt( $tmp_user->phone ),
-                    'nik'           =>  $newEncrypter->encrypt( $tmp_user->nik ),
-                    'position'      =>  $newEncrypter->encrypt( $tmp_user->Position['name']),
-                    'province'      =>  $newEncrypter->encrypt( $tmp_user->Province['name']),
-                    'district'      =>  $newEncrypter->encrypt( $tmp_user->District['name']),
-                    'sub_district'  =>  $newEncrypter->encrypt( $tmp_user->SubDistrict['name']),
-                    'village'       =>  $newEncrypter->encrypt( $tmp_user->Village['name']),
-                    'qrcode'        =>  $newEncrypter->encrypt( $tmp_user->qrcode),
-                    'address'       =>  $newEncrypter->encrypt( $tmp_user->address ),
-                    'post_code'     =>  $newEncrypter->encrypt( $tmp_user->post_code ),
-                    'status'        =>  $tmp_user->status,
-                    'active'        =>  $tmp_user->active,
-                ]
-            ];
-            $es = $this->repository->create($params);
+            
             Mail::to($tmp_user->email)->send(new RegisteredMember($tmp_user));
             if(!$request->api){
                 echo json_encode($result = array([
@@ -368,18 +345,21 @@ class MemberController extends Controller
 
         if(!isset($request->api)){
             $user = User::find($request->id);   
+            $user->no_member = $request->no_member;
         }
         $user->name             = $request->name;
         $user->email            = $request->email;
         $user->phone            = $request->phone;
         $user->nik              = $request->nik;
         if($request->hasFile('photo')){
-            $photo = "Pas Photo ".$request->name.'.'.$request->file('photo')->extension();
+            $photo = "Pas Photo ".$request->name;
+            $photo = Str::slug($photo).'.'.$request->file('photo')->extension();
             $request->file('photo')->storeAs("data_member/".$user->id,$photo,'public');
             $user->photo = $photo;
         }
         if($request->hasFile('id_card_photo')){
-            $ktp = "KTP ".$request->name.'.'.$request->file('id_card')->extension();
+            $ktp = "KTP ".$request->name;
+            $ktp = Str::slug($ktp).'.'.$request->file('id_card')->extension();
             $request->file('id_card')->storeAs("data_member/".$user->id,$ktp,'public');
             $user->id_card_photo = $ktp;
         }
@@ -396,30 +376,32 @@ class MemberController extends Controller
         $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$user->token), Config::get('app.cipher') );
 
         if($result){
-            $params = [
-                'index' => 'members',
-                'id'    => $user->no_member,
-                'body'  => [
-                    'doc' => [
-                        'no_member'     =>  $user->no_member,
-                        'name'          =>  $newEncrypter->encrypt($user->name),
-                        'email'         =>  $newEncrypter->encrypt( $user->email ),
-                        'phone'         =>  $newEncrypter->encrypt( $user->phone ),
-                        'nik'           =>  $newEncrypter->encrypt( $user->nik ),
-                        'position'      =>  $newEncrypter->encrypt( $user->Position['name']),
-                        'province'      =>  $newEncrypter->encrypt( $user->Province['name']),
-                        'district'      =>  $newEncrypter->encrypt( $user->District['name']),
-                        'sub_district'  =>  $newEncrypter->encrypt( $user->SubDistrict['name']),
-                        'village'       =>  $newEncrypter->encrypt( $user->Village['name']),
-                        'qrcode'        =>  $newEncrypter->encrypt( $user->qrcode),
-                        'address'       =>  $newEncrypter->encrypt( $user->address ),
-                        'post_code'     =>  $newEncrypter->encrypt( $user->post_code ),
-                        'status'        =>  $user->status,
-                        'active'        =>  $user->active,
+            if($user->status != "0"){
+                $params = [
+                    'index' => 'members',
+                    'id'    => $user->no_member,
+                    'body'  => [
+                        'doc' => [
+                            'no_member'     =>  $user->no_member,
+                            'name'          =>  $newEncrypter->encrypt($user->name),
+                            'email'         =>  $newEncrypter->encrypt( $user->email ),
+                            'phone'         =>  $newEncrypter->encrypt( $user->phone ),
+                            'nik'           =>  $newEncrypter->encrypt( $user->nik ),
+                            'position'      =>  $newEncrypter->encrypt( $user->Position['name']),
+                            'province'      =>  $newEncrypter->encrypt( $user->Province['name']),
+                            'district'      =>  $newEncrypter->encrypt( $user->District['name']),
+                            'sub_district'  =>  $newEncrypter->encrypt( $user->SubDistrict['name']),
+                            'village'       =>  $newEncrypter->encrypt( $user->Village['name']),
+                            'qrcode'        =>  $newEncrypter->encrypt( $user->qrcode),
+                            'address'       =>  $newEncrypter->encrypt( $user->address ),
+                            'post_code'     =>  $newEncrypter->encrypt( $user->post_code ),
+                            'status'        =>  $user->status,
+                            'active'        =>  $user->active,
+                        ]
                     ]
-                ]
-            ];
-            $es = $this->repository->update($params);
+                ];
+                $es = $this->repository->update($params);
+            }
 
             if(!$request->api){
                 echo json_encode($result = array([
@@ -454,18 +436,42 @@ class MemberController extends Controller
             'id'            =>  'required',
             'status'      =>  'required',
         ]);
+        $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$user->token), Config::get('app.cipher') );
+        
         if($request->status == "1"){
-            if($user->no_member == "null"){
-                $user->no_member = date("Y.dm.").$user->id;
-            }
+            $user->no_member = date("Y.md.").$user->id;
             $type = "Diverifikasi";
             $user->status = 1;
             Mail::to($user->email)->send(new VerifiedMember($user));
+
+            $params = [
+                'index' => 'members',
+                'id'    => $user->no_member,
+                'body'  => [
+                    'no_member'     =>  $user->no_member,
+                    'name'          =>  $newEncrypter->encrypt($user->name),
+                    'email'         =>  $newEncrypter->encrypt( $user->email ),
+                    'phone'         =>  $newEncrypter->encrypt( $user->phone ),
+                    'nik'           =>  $newEncrypter->encrypt( $user->nik ),
+                    'position'      =>  $newEncrypter->encrypt( $user->Position['name']),
+                    'province'      =>  $newEncrypter->encrypt( $user->Province['name']),
+                    'district'      =>  $newEncrypter->encrypt( $user->District['name']),
+                    'sub_district'  =>  $newEncrypter->encrypt( $user->SubDistrict['name']),
+                    'village'       =>  $newEncrypter->encrypt( $user->Village['name']),
+                    'qrcode'        =>  $newEncrypter->encrypt( $user->qrcode),
+                    'address'       =>  $newEncrypter->encrypt( $user->address ),
+                    'post_code'     =>  $newEncrypter->encrypt( $user->post_code ),
+                    'status'        =>  $user->status,
+                    'active'        =>  $user->active,
+                ]
+            ];
+            $es = $this->repository->create($params);
+
         }else if($request->status == "2"){
             $type = "Diblock";
             $user->status = 2;
             $user->active = 0;
-            Mail::to($user->email)->send(new BlockMember($user));
+            Mail::to($user->email)->send(new BlockMember($user)); 
         }else if($request->status == "3"){
             $type = "Unblock";
             $user->status = 1;
@@ -473,6 +479,34 @@ class MemberController extends Controller
         }
 
         $result = $user->save();
+
+        if($request->status != "1"){
+            $params = [
+                'index' => 'members',
+                'id'    => $user->no_member,
+                'body'  => [
+                    'doc' => [
+                        'no_member'     =>  $user->no_member,
+                        'name'          =>  $newEncrypter->encrypt($user->name),
+                        'email'         =>  $newEncrypter->encrypt( $user->email ),
+                        'phone'         =>  $newEncrypter->encrypt( $user->phone ),
+                        'nik'           =>  $newEncrypter->encrypt( $user->nik ),
+                        'position'      =>  $newEncrypter->encrypt( $user->Position['name']),
+                        'province'      =>  $newEncrypter->encrypt( $user->Province['name']),
+                        'district'      =>  $newEncrypter->encrypt( $user->District['name']),
+                        'sub_district'  =>  $newEncrypter->encrypt( $user->SubDistrict['name']),
+                        'village'       =>  $newEncrypter->encrypt( $user->Village['name']),
+                        'qrcode'        =>  $newEncrypter->encrypt( $user->qrcode),
+                        'address'       =>  $newEncrypter->encrypt( $user->address ),
+                        'post_code'     =>  $newEncrypter->encrypt( $user->post_code ),
+                        'status'        =>  $user->status,
+                        'active'        =>  $user->active,
+                    ]
+                ]
+            ];
+            $es = $this->repository->update($params);
+        }
+
         if($result){
             echo json_encode($result = array([
                 "message"   => "Member Berhasil $type",
@@ -483,6 +517,27 @@ class MemberController extends Controller
                 "message"   => "Member Gagal $type",
                 "type"      => "error",
                 "code"    => false]));
+        }
+    }
+
+    public function check_status(Request $request){
+        $user = User::where('email',$request->email)->first();
+        if($user != null){
+            return json_encode([
+                'code'      =>  200,
+                'data'      =>  [
+                    'status'    =>  $user->status,
+                    'active'    =>  $user->active,
+                    'no_member' =>  $user->no_member
+                ],
+                'message'   =>  "Data member Ditemukan"
+            ]);
+        }else{
+            return json_encode([
+                'code'      =>  500,
+                'data'      =>  null,
+                'message'   =>  "Data member Tidak Ditemukan"
+            ]);
         }
     }
 }

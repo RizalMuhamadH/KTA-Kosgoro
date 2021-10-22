@@ -25,4 +25,5 @@ Route::post('/create/member',[MemberController::class,'store']);
 Route::post('/generate_otp',[MemberController::class,'generate_otp']);
 Route::post('/login/member',[MemberController::class,'login']);
 Route::post('/update/member',[MemberController::class,'update']);
+Route::post('/check_status/member',[MemberController::class,'check_status']);
 Route::get('/detail/member',[MemberController::class,'detail']);
