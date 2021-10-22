@@ -290,9 +290,11 @@ class MemberController extends Controller
                     'district'      =>  $newEncrypter->encrypt( $tmp_user->District['name']),
                     'sub_district'  =>  $newEncrypter->encrypt( $tmp_user->SubDistrict['name']),
                     'village'       =>  $newEncrypter->encrypt( $tmp_user->Village['name']),
-                    'qrcode'        =>  $tmp_user->qrcode,
+                    'qrcode'        =>  $newEncrypter->encrypt( $tmp_user->qrcode),
                     'address'       =>  $newEncrypter->encrypt( $tmp_user->address ),
                     'post_code'     =>  $newEncrypter->encrypt( $tmp_user->post_code ),
+                    'status'        =>  $tmp_user->status,
+                    'active'        =>  $tmp_user->active,
                 ]
             ];
             $es = $this->repository->create($params);
@@ -409,9 +411,11 @@ class MemberController extends Controller
                         'district'      =>  $newEncrypter->encrypt( $user->District['name']),
                         'sub_district'  =>  $newEncrypter->encrypt( $user->SubDistrict['name']),
                         'village'       =>  $newEncrypter->encrypt( $user->Village['name']),
-                        'qrcode'        =>  $user->qrcode,
+                        'qrcode'        =>  $newEncrypter->encrypt( $user->qrcode),
                         'address'       =>  $newEncrypter->encrypt( $user->address ),
                         'post_code'     =>  $newEncrypter->encrypt( $user->post_code ),
+                        'status'        =>  $user->status,
+                        'active'        =>  $user->active,
                     ]
                 ]
             ];
