@@ -1,7 +1,7 @@
 @component('mail::message')
 Kepada Yth, {{$user->name}}
 
-Selamat bergabung menjadi anggota Kosgoro, dengan No Member {{$user->no_member}}
+Selamat bergabung menjadi anggota Kosgoro
 
 Terima kasih telah menggunakan aplikasi Kosgoro
 

@@ -439,7 +439,11 @@ class MemberController extends Controller
         $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$user->token), Config::get('app.cipher') );
         
         if($request->status == "1"){
-            $user->no_member = date("Y.md.").$user->id;
+            if($request->option == "0"){
+                $user->no_member = date("Y.md.").$user->id;
+            }else if($request->option == "1"){
+                $user->no_member = $request->no_member;
+            }
             $type = "Diverifikasi";
             $user->status = 1;
             Mail::to($user->email)->send(new VerifiedMember($user));

@@ -447,6 +447,43 @@
         </div>
     </div>
 
+    <div id="VerifiedMember" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="my-modal-title">Verified Member</h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('members.change_status')}}" action="POST" id="form_verified_member">
+                        @csrf
+                        <input type="hidden" name="id" id="verified_member_id">
+                        <input type="hidden" name="status" value="1">
+                        <input type="hidden" name="_method" value="PUT">
+                        <div class="form-group">
+                            <label> Custom No member? </label>
+                            <select class="form-control" name="option" id="custom_no_member">
+                                <option value="1"> Yes </option>
+                                <option value="0" selected> No </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label> Current No Member </label>
+                            <input type="text" class="form-control" id="current_no_member" name="no_member" required readonly>
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success btn_save_verified"> <i class="fas fa-save"> </i> Verified </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
     <form action="{{ route('members.change_status') }}" method="POST" id="form_change_status" style="display: none">
         @csrf
         <div class="laravel_input">
@@ -461,6 +498,7 @@
 @push('custom_js')
     <script>
         $(document).ready(function(){
+            var generated_no_member = "{{date('Y.dm.')}}";
             var image_source = "{{asset('storage/data_member')}}";
             var table_member = $("#table_member").DataTable({
                 destroy: true,
@@ -980,12 +1018,38 @@
                     })
             });
 
-            $("#table_member").on('click', ".btn_verified", function() {
-                $("#change_status_id").val($(this).data('id'));
-                $("#status_change").val(1);
+
+            $("#table_member").on('click','.btn_verified',function(){
+                $.ajax({
+                    url: "{{route('members.detail')}}",
+                    dataType: 'JSON',
+                    method: 'GET',
+                    data: {id: $(this).data('id'), cms:true},
+                    success:function(data){
+                        generated_no_member = generated_no_member+data.id
+                        $("#current_no_member").val(generated_no_member);
+                        $("#verified_member_id").val(data.id);
+                        $("#VerifiedMember").modal('show');
+                    }
+
+                })
+            });
+
+            $("#custom_no_member").on('change',function(){
+                if($(this).val() == "1"){
+                    $("#current_no_member").val('');
+                    $("#current_no_member").attr('readonly',false);
+                }else if($(this).val() == "0"){
+                    $("#current_no_member").val(generated_no_member);
+                    $("#current_no_member").attr('readonly',true);
+                }
+            })
+
+            $(".btn_save_verified").on('click', function(e) {
+                e.preventDefault();
                 Swal.fire({
                         title: "Apakah anda yakin?",
-                        text: "Anda akan memverifikasi data",
+                        text: "Anda akan memverifikasi member ini.",
                         showCancelButton: 'true',
                         icon: "warning",
                         buttons: true,
@@ -995,24 +1059,64 @@
                     .then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: $("#form_change_status").attr('action'),
+                                url: $("#form_verified_member").attr('action'),
                                 method: 'POST',
-                                dataType: 'json',
-                                data: $("#form_change_status").serialize(),
-                                success: function(result) {
-                                    if (result[0].code) {
-                                        Swal.fire("Done!", result[0].message, result[0]
-                                            .type);
-                                    } else {
-                                        Swal.fire("Error!", result[0].message, result[0]
-                                            .type);
-                                    }
+                                dataType: 'JSON',
+                                data: $("#form_verified_member").serialize(),
+                                success: function(res) {
+                                    Swal.fire("Done!", res[0].message, res[0].type, 10);
+                                    $("#VerifiedMember").modal('hide');
                                     table_member.ajax.reload();
+                                },
+                                error: function(result) {
+                                    var response = JSON.parse(result.responseText)
+                                    var message = '';
+                                    $.each(response.errors, function(key, values) {
+                                        $.each(values, function(key, value) {
+                                            message = message + value +
+                                                "<br>";
+                                        })
+                                    })
+                                    Swal.fire("Error!", message, 'error', 10);
                                 }
-                            });
+                            })
                         }
-                    });
-            })
+                    })
+            });
+            
+            // $("#table_member").on('click', ".btn_verified", function() {
+            //     $("#change_status_id").val($(this).data('id'));
+            //     $("#status_change").val(1);
+            //     Swal.fire({
+            //             title: "Apakah anda yakin?",
+            //             text: "Anda akan memverifikasi data",
+            //             showCancelButton: 'true',
+            //             icon: "warning",
+            //             buttons: true,
+            //             dangerMode: true,
+            //             allowOutsideClick: false,
+            //         })
+            //         .then((result) => {
+            //             if (result.isConfirmed) {
+            //                 $.ajax({
+            //                     url: $("#form_change_status").attr('action'),
+            //                     method: 'POST',
+            //                     dataType: 'json',
+            //                     data: $("#form_change_status").serialize(),
+            //                     success: function(result) {
+            //                         if (result[0].code) {
+            //                             Swal.fire("Done!", result[0].message, result[0]
+            //                                 .type);
+            //                         } else {
+            //                             Swal.fire("Error!", result[0].message, result[0]
+            //                                 .type);
+            //                         }
+            //                         table_member.ajax.reload();
+            //                     }
+            //                 });
+            //             }
+            //         });
+            // })
 
             $("#table_member").on('click', ".btn_block", function() {
                 $("#change_status_id").val($(this).data('id'));
