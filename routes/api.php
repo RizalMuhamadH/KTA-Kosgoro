@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\APIController;
+use App\Http\Controllers\ComplimentaryController;
 use App\Http\Controllers\MemberController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,3 +28,7 @@ Route::post('/login/member',[MemberController::class,'login']);
 Route::post('/update/member',[MemberController::class,'update']);
 Route::post('/check_status/member',[MemberController::class,'check_status']);
 Route::get('/detail/member',[MemberController::class,'detail']);
+Route::get('/province',[ComplimentaryController::class,'getProvince']);
+Route::get('/district',[ComplimentaryController::class,'getDistrict']);
+Route::get('/subDistrict',[ComplimentaryController::class,'getSubDistrict']);
+Route::get('/getVillage',[ComplimentaryController::class,'getVillage']);

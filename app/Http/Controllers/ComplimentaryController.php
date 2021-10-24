@@ -20,7 +20,7 @@ class ComplimentaryController extends Controller
             }
             echo json_encode($result);
         }else{
-            echo json_encode($tmp_province);
+            return response($tmp_province, 200);
         }
     }
 
@@ -33,7 +33,7 @@ class ComplimentaryController extends Controller
             }
             echo json_encode($result);
         }else{
-            echo json_encode($tmp_district);
+            return response($tmp_district, 200);
         }
     }
 
@@ -46,7 +46,7 @@ class ComplimentaryController extends Controller
             }
             echo json_encode($result);
         }else{
-            echo json_encode($tmp_sub_district);
+            return response($tmp_sub_district, 200);
         }
     }
 
@@ -59,7 +59,7 @@ class ComplimentaryController extends Controller
             }
             echo json_encode($result);
         }else{
-            echo json_encode($tmp_vilalges);
+            return response($tmp_vilalges, 200);
         }
     }
 

@@ -162,13 +162,24 @@ class MemberController extends Controller
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
                         'code'          => 200,
-                        'no_member'     => $tmp_user->no_member  
+                        'no_member'     => $tmp_user->no_member,
+                        'message'       => "Berhasil login"  
                     ];
                     return response($response, 200);
                     die;
                 }
                 return redirect('/home');
             }else{
+                if($request->api){
+                    $response = [
+                        'token'         => null,
+                        'status'        => null,
+                        'code'          => 500,
+                        'no_member'     => null,
+                        'message'       => "Gagal login"  
+                    ];
+                    return response($response, 200);
+                }
                 return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
             }
         }elseif($request->phone_number != null){
@@ -295,7 +306,8 @@ class MemberController extends Controller
                 $response = [
                     "message"   => "Member Berhasil Ditambahkan",
                     "type"      => "success",
-                    "code"    => 200];
+                    "token"     => $tmp_user->token,
+                    "code"      => 200];
                     return response($response, 200);
             }
         }else{
@@ -549,6 +561,7 @@ class MemberController extends Controller
                 'code'      =>  200,
                 'data'      =>  [
                     'status'    =>  $user->status,
+                    'token'     =>  $user->token,
                     'active'    =>  $user->active,
                     'no_member' =>  $user->no_member
                 ],
