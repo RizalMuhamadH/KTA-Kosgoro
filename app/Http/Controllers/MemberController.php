@@ -242,7 +242,7 @@ class MemberController extends Controller
             if($validator->fails()){
                     $response = [
                         'code'  =>  500,
-                        'message'   =>  $validator->errors()
+                        'message'   =>  $validator->errors()->first()
                     ];
 
                     return response($response, 200);
@@ -306,7 +306,11 @@ class MemberController extends Controller
                 $response = [
                     "message"   => "Member Berhasil Ditambahkan",
                     "type"      => "success",
-                    "token"     => $tmp_user->token,
+                    "data"      => [
+                        "token"     => $tmp_user->token,
+                        "name"      => $tmp_user->name,
+                        "district"  => $tmp_user->District->name,
+                    ],
                     "code"      => 200];
                     return response($response, 200);
             }
