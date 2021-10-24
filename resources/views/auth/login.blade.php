@@ -47,15 +47,15 @@
                                     @csrf
                                     <input type="hidden" name="cms" readonly value="true">
                                     <ul class="nav nav-pills before_clicked" id="myTab3" role="tablist">
-                                        <li class="nav-item w-50 text-center">
-                                          <a class="nav-link active show" id="phone_number-tab" data-toggle="tab" href="#phone_number" role="tab" aria-controls="phone_number" aria-selected="true">Phone Number</a>
-                                        </li>
-                                        <li class="nav-item w-50 text-center">
-                                          <a class="nav-link" id="email-tab" data-toggle="tab" href="#email" role="tab" aria-controls="email" aria-selected="false">Email</a>
-                                        </li>
+                                        {{-- <li class="nav-item w-50 text-center">
+                                          <a class="nav-link " id="phone_number-tab" data-toggle="tab" href="#phone_number" role="tab" aria-controls="phone_number" aria-selected="true">Phone Number</a>
+                                        </li> --}}
+                                        {{-- <li class="nav-item w-50 text-center">
+                                          <a class="nav-link active show" id="email-tab" data-toggle="tab" href="#email" role="tab" aria-controls="email" aria-selected="false">Email</a>
+                                        </li> --}}
                                     </ul>
                                     <div class="tab-content before_clicked" id="myTabContent2">
-                                        <div class="tab-pane fade active show" id="phone_number" role="tabpanel" aria-labelledby="phone_number-tab">
+                                        <div class="tab-pane fade" id="phone_number" role="tabpanel" aria-labelledby="phone_number-tab">
                                             <div class="form-group">
                                                 <label for="phone">Phone Number</label>
                                                 <div class="input-group mb-2">
@@ -72,7 +72,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="email" role="tabpanel" aria-labelledby="email-tab">
+                                        <div class="tab-pane fade active show" id="email" role="tabpanel" aria-labelledby="email-tab">
                                             <div class="form-group">
                                                 <label for="email">{{ __('E-Mail Address') }}</label>
                                                 <input id="email_form" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus>
