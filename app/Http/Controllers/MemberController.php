@@ -47,7 +47,7 @@ class MemberController extends Controller
             echo json_encode($tmp);
         }else{
             if($tmp != null){
-                
+
                 $response = [
                     'code'  =>  200,
                     'text'  =>  "Member Ditemukan",
@@ -64,7 +64,7 @@ class MemberController extends Controller
 
                 return response($response, 200);
             }
-            
+
         }
     }
 
@@ -163,7 +163,7 @@ class MemberController extends Controller
                         'status'        => $tmp_user->status,
                         'code'          => 200,
                         'no_member'     => $tmp_user->no_member,
-                        'message'       => "Berhasil login"  
+                        'message'       => "Berhasil login"
                     ];
                     return response($response, 200);
                     die;
@@ -176,7 +176,7 @@ class MemberController extends Controller
                         'status'        => null,
                         'code'          => 500,
                         'no_member'     => null,
-                        'message'       => "Gagal login"  
+                        'message'       => "Gagal login"
                     ];
                     return response($response, 200);
                 }
@@ -192,7 +192,7 @@ class MemberController extends Controller
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
                         'code'          => 200,
-                        'no_member'     => $tmp_user->no_member  
+                        'no_member'     => $tmp_user->no_member
                     ];
                     return response($response, 200);
                 }
@@ -294,7 +294,7 @@ class MemberController extends Controller
             $tmp_user->id_card_photo = $ktp;
             $tmp_user->qrcode = $qr_code;
             $tmp_user->save();
-            
+
             Mail::to($tmp_user->email)->send(new RegisteredMember($tmp_user));
             if(!$request->api){
                 $response = [
@@ -374,7 +374,7 @@ class MemberController extends Controller
         }
 
         if(!isset($request->api)){
-            $user = User::find($request->id);   
+            $user = User::find($request->id);
             $user->no_member = $request->no_member;
         }
         $user->name             = $request->name;
@@ -471,11 +471,14 @@ class MemberController extends Controller
             'status'      =>  'required',
         ]);
         $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$user->token), Config::get('app.cipher') );
-        
+
         if($request->status == "1"){
             if($request->option == "0"){
                 $user->no_member = date("Y.md.").$user->id;
             }else if($request->option == "1"){
+                $request->validate([
+                    'no_member' => 'required|min:16|max:16|unique:members,no_member,'.$user->id,
+                ]);
                 $user->no_member = $request->no_member;
             }
             $type = "Diverifikasi";
@@ -509,7 +512,7 @@ class MemberController extends Controller
             $type = "Diblock";
             $user->status = 2;
             $user->active = 0;
-            Mail::to($user->email)->send(new BlockMember($user)); 
+            Mail::to($user->email)->send(new BlockMember($user));
         }else if($request->status == "3"){
             $type = "Unblock";
             $user->status = 1;
