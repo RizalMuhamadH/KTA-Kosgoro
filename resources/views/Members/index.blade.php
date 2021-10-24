@@ -200,7 +200,7 @@
                                 <div class="form-group">
                                     <label> Position Member </label>
                                     <select class="form-control position" name="position">
-                                        <option value="All" selected> All </option>
+                                        <option value="" disabled selected> Select Position </option>
                                         @foreach ($positions as $position)
                                             <option value="{{$position->id}}">{{$position->name}}</option>
                                         @endforeach
@@ -414,7 +414,7 @@
                                 <div class="form-group">
                                     <label> Position Member </label>
                                     <select class="form-control position" name="position" id="position_edit">
-                                        <option value="All" selected> All </option>
+                                        <option value="" disabled selected> Select Position </option>
                                         @foreach ($positions as $position)
                                             <option value="{{$position->id}}">{{$position->name}}</option>
                                         @endforeach
@@ -463,7 +463,7 @@
                         <input type="hidden" name="status" value="1">
                         <input type="hidden" name="_method" value="PUT">
                         <div class="form-group">
-                            <label> Custom No member? </label>
+                            <label> Custom Number Member? </label>
                             <select class="form-control" name="option" id="custom_no_member">
                                 <option value="1"> Yes </option>
                                 <option value="0" selected> No </option>
@@ -473,7 +473,7 @@
                             <label> Current No Member </label>
                             <input type="text" class="form-control" id="current_no_member" name="no_member" required readonly>
                         </div>
-                        
+
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -482,7 +482,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <form action="{{ route('members.change_status') }}" method="POST" id="form_change_status" style="display: none">
         @csrf
@@ -498,6 +498,7 @@
 @push('custom_js')
     <script>
         $(document).ready(function(){
+            const auth_user = "{{Auth::user()->position_id}}";
             var generated_no_member = "{{date('Y.dm.')}}";
             var image_source = "{{asset('storage/data_member')}}";
             var table_member = $("#table_member").DataTable({
@@ -564,19 +565,44 @@
                         }
                     }},
                     { data:  'null',render:function(data,type,row){
-                        button_return = "<div class='btn-group'>";
-                        button_return = button_return + "<button class='btn btn-info btn_detail' title='Detail Member' data-id='"+row.id+"'> <i class='fas fa-eye'> </i> </button>";
-                        button_return = button_return + "<button class='btn btn-warning btn_edit' title='Edit Member' data-id='"+row.id+"'> <i class='fas fa-pen'> </i> </button>";
-                        if(row.status == "0"){
-                            button_return = button_return + "<button class='btn btn-success btn_verified' title='Verified Member' data-id='"+row.id+"'> <i class='fas fa-check'> </i> </button>";
-                            button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-times'> </i> </button>";
-                        }else if(row.status == "1"){
-                            button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
-                        }else if(row.status == "2"){
-                            button_return = button_return + "<button class='btn btn-success btn_unblock' title='Unblock Member' data-id='"+row.id+"'> <i class='fas fa-lock-open'> </i> </button>";
+                        if(auth_user == "1"){
+                            if(row.position_id != "1"){
+                                button_return = "<div class='btn-group'>";
+                                button_return = button_return + "<button class='btn btn-info btn_detail' title='Detail Member' data-id='"+row.id+"'> <i class='fas fa-eye'> </i> </button>";
+                                button_return = button_return + "<button class='btn btn-warning btn_edit' title='Edit Member' data-id='"+row.id+"'> <i class='fas fa-pen'> </i> </button>";
+                                if(row.status == "0"){
+                                    button_return = button_return + "<button class='btn btn-success btn_verified' title='Verified Member' data-id='"+row.id+"'> <i class='fas fa-check'> </i> </button>";
+                                    button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
+                                }else if(row.status == "1"){
+                                    button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
+                                }else if(row.status == "2"){
+                                    button_return = button_return + "<button class='btn btn-success btn_unblock' title='Unblock Member' data-id='"+row.id+"'> <i class='fas fa-lock-open'> </i> </button>";
+                                }
+                                button_return = button_return + "</div>";
+                                return button_return;
+                            }else{
+                                return "Uneditable";
+                            }
+                        }else if(auth_user == "2"){
+                            if(row.position_id != "3"){
+                                button_return = "<div class='btn-group'>";
+                                button_return = button_return + "<button class='btn btn-info btn_detail' title='Detail Member' data-id='"+row.id+"'> <i class='fas fa-eye'> </i> </button>";
+                                button_return = button_return + "<button class='btn btn-warning btn_edit' title='Edit Member' data-id='"+row.id+"'> <i class='fas fa-pen'> </i> </button>";
+                                if(row.status == "0"){
+                                    button_return = button_return + "<button class='btn btn-success btn_verified' title='Verified Member' data-id='"+row.id+"'> <i class='fas fa-check'> </i> </button>";
+                                    button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
+                                }else if(row.status == "1"){
+                                    button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
+                                }else if(row.status == "2"){
+                                    button_return = button_return + "<button class='btn btn-success btn_unblock' title='Unblock Member' data-id='"+row.id+"'> <i class='fas fa-lock-open'> </i> </button>";
+                                }
+                                button_return = button_return + "</div>";
+                                return button_return;
+                            }else{
+                                return "Uneditable";
+                            }
+
                         }
-                        button_return = button_return + "</div>";
-                        return button_return;
                     }}
                 ]
             });
@@ -887,7 +913,7 @@
                                 contentType: false,
                                 data: formData,
                                 success: function(res) {
-                                    Swal.fire("Done!", res[0].message, res[0].type, 10);
+                                    Swal.fire("Done!", res.message, res.type, 10);
                                     $("#NewMember").modal('hide');
                                     $("#form_new_member")[0].reset();
                                     table_member.ajax.reload();
@@ -997,7 +1023,8 @@
                                 contentType: false,
                                 data: formData,
                                 success: function(res) {
-                                    Swal.fire("Done!", res[0].message, res[0].type, 10);
+                                    console.log(res);
+                                    Swal.fire("Done!", res.message, res.type, 10);
                                     $("#EditMember").modal('hide');
                                     $("#form_edit_member")[0].reset();
                                     table_member.ajax.reload();
@@ -1064,7 +1091,7 @@
                                 dataType: 'JSON',
                                 data: $("#form_verified_member").serialize(),
                                 success: function(res) {
-                                    Swal.fire("Done!", res[0].message, res[0].type, 10);
+                                    Swal.fire("Done!", res.message, res.type, 10);
                                     $("#VerifiedMember").modal('hide');
                                     table_member.ajax.reload();
                                 },
@@ -1083,7 +1110,7 @@
                         }
                     })
             });
-            
+
             // $("#table_member").on('click', ".btn_verified", function() {
             //     $("#change_status_id").val($(this).data('id'));
             //     $("#status_change").val(1);
@@ -1137,12 +1164,12 @@
                                 method: 'POST',
                                 dataType: 'json',
                                 data: $("#form_change_status").serialize(),
-                                success: function(result) {
-                                    if (result[0].code) {
-                                        Swal.fire("Done!", result[0].message, result[0]
+                                success: function(res) {
+                                    if (res.code) {
+                                        Swal.fire("Done!", res.message, res
                                             .type);
                                     } else {
-                                        Swal.fire("Error!", result[0].message, result[0]
+                                        Swal.fire("Error!", res.message, res
                                             .type);
                                     }
                                     table_member.ajax.reload();
@@ -1171,12 +1198,12 @@
                                 method: 'POST',
                                 dataType: 'json',
                                 data: $("#form_change_status").serialize(),
-                                success: function(result) {
-                                    if (result[0].code) {
-                                        Swal.fire("Done!", result[0].message, result[0]
+                                success: function(res) {
+                                    if (res.code) {
+                                        Swal.fire("Done!", res.message, res
                                             .type);
                                     } else {
-                                        Swal.fire("Error!", result[0].message, result[0]
+                                        Swal.fire("Error!", res.message, res
                                             .type);
                                     }
                                     table_member.ajax.reload();

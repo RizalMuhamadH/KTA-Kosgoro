@@ -152,12 +152,35 @@ class MemberController extends Controller
         $request->validate([
             'password'   =>  'required'
         ]);
-        if($request->email != null){
-            if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'otp_used' => 0, 'active' => 1])){
-                $tmp_user = User::where('email',$request->email)->first();
-                $tmp_user->otp_used = 1;
-                $tmp_user->save();
-                if($request->api){
+
+        if(isset($request->cms)){
+            if($request->email != null){
+                if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'otp_used' => 0, 'active' => 1, 'position_id' => array('1','2')])){
+                    $tmp_user = User::where('email',$request->email)->first();
+                    $tmp_user->otp_used = 1;
+                    $tmp_user->save();
+                    return redirect('/home');
+                }else{
+                    return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
+                }
+            }elseif($request->phone_number != null){
+                if(Auth::attempt(['phone' => $request->phone_number, 'password' => $request->password, 'otp_used' => 0, 'active' => 1, 'position_id' => array(',1','2')])){
+                    $tmp_user = User::where('phone',$request->phone_number)->first();
+                    $tmp_user->otp_used = 1;
+                    $tmp_user->save();
+                    return redirect('/home');
+                }else{
+                    return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
+                }
+            }else{
+                return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
+            }
+        }else{
+            if($request->email != null){
+                if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'otp_used' => 0, 'active' => 1])){
+                    $tmp_user = User::where('email',$request->email)->first();
+                    $tmp_user->otp_used = 1;
+                    $tmp_user->save();
                     $response = [
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
@@ -166,11 +189,7 @@ class MemberController extends Controller
                         'message'       => "Berhasil login"
                     ];
                     return response($response, 200);
-                    die;
-                }
-                return redirect('/home');
-            }else{
-                if($request->api){
+                }else{
                     $response = [
                         'token'         => null,
                         'status'        => null,
@@ -180,14 +199,11 @@ class MemberController extends Controller
                     ];
                     return response($response, 200);
                 }
-                return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
-            }
-        }elseif($request->phone_number != null){
-            if(Auth::attempt(['phone' => $request->phone_number, 'password' => $request->password, 'otp_used' => 0, 'active' => 1])){
-                $tmp_user = User::where('phone',$request->phone_number)->first();
-                $tmp_user->otp_used = 1;
-                $tmp_user->save();
-                if($request->api){
+            }elseif($request->phone_number != null){
+                if(Auth::attempt(['phone' => $request->phone_number, 'password' => $request->password, 'otp_used' => 0, 'active' => 1])){
+                    $tmp_user = User::where('phone',$request->phone_number)->first();
+                    $tmp_user->otp_used = 1;
+                    $tmp_user->save();
                     $response = [
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
@@ -195,13 +211,26 @@ class MemberController extends Controller
                         'no_member'     => $tmp_user->no_member
                     ];
                     return response($response, 200);
+                }else{
+                     $response = [
+                        'token'         => null,
+                        'status'        => null,
+                        'code'          => 500,
+                        'no_member'     => null,
+                        'message'       => "Gagal login"
+                    ];
+                    return response($response, 200);
                 }
-                return redirect('/home');
             }else{
-                return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
+                 $response = [
+                        'token'         => null,
+                        'status'        => null,
+                        'code'          => 500,
+                        'no_member'     => null,
+                        'message'       => "Gagal login"
+                    ];
+                    return response($response, 200);
             }
-        }else{
-            return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
         }
     }
 
@@ -375,7 +404,6 @@ class MemberController extends Controller
 
         if(!isset($request->api)){
             $user = User::find($request->id);
-            $user->no_member = $request->no_member;
         }
         $user->name             = $request->name;
         $user->email            = $request->email;
@@ -404,7 +432,6 @@ class MemberController extends Controller
 
         $result = $user->save();
         $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$user->token), Config::get('app.cipher') );
-
         if($result){
             if($user->status != "0"){
                 $params = [
@@ -433,33 +460,17 @@ class MemberController extends Controller
                 $es = $this->repository->update($params);
             }
 
-            if(!$request->api){
-                $response = [
-                    "message"   => "Member Berhasil Diupdate",
-                    "type"      => "success",
-                    "code"    => true];
-                    return response($response, 200);
-            }else{
-                $response = [
-                    "message"   => "Member Berhasil Diupdate",
-                    "type"      => "success",
-                    "code"    => 200];
-                    return response($response, 200);
-            }
+            $response = [
+                "message"   => "Member Berhasil Diupdate",
+                "type"      => "success",
+                "code"    => true];
+                return response($response, 200);
         }else{
-            if(!$request->api){
-                $response = [
-                    "message"   => "Member Gagal Diupdate",
-                    "type"      => "error",
-                    "code"    => 500];
-                    return response($response, 200);
-            }else{
-                $response = [
-                    "message"   => "Member Gagal Diupdate",
-                    "type"      => "error",
-                    "code"    => 500];
-                    return response($response, 200);
-            }
+            $response = [
+                "message"   => "Member Gagal Diupdate",
+                "type"      => "error",
+                "code"    => 500];
+                return response($response, 200);
         }
     }
 
@@ -549,15 +560,19 @@ class MemberController extends Controller
         }
 
         if($result){
-            echo json_encode($result = array([
+            $response = [
+                'code'      =>  true,
                 "message"   => "Member Berhasil $type",
                 "type"      => "success",
-                "code"    => true]));
+            ];
+            return response($response, 200);
         }else{
-            echo json_encode($result = array([
+            $response = [
+                'code'      =>  false,
                 "message"   => "Member Gagal $type",
                 "type"      => "error",
-                "code"    => false]));
+            ];
+            return response($response, 200);
         }
     }
 

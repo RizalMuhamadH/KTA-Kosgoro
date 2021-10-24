@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Districts;
+use App\Models\Position;
 use App\Models\Provinces;
 use App\Models\SubDistricts;
 use App\Models\Villages;
@@ -27,7 +28,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('home',[
+            'positions' => Position::all()
+        ]);
     }
 
 

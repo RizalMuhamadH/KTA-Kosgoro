@@ -18,7 +18,6 @@
     <div id="app">
         <section class="section">
             <div class="container mt-5">
-
                 <div class="row">
                     <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
                         <div class="login-brand">
@@ -46,6 +45,7 @@
                                 @endif
                                 <form method="POST" action="{{route('member_login')}}">
                                     @csrf
+                                    <input type="hidden" name="cms" readonly value="true">
                                     <ul class="nav nav-pills before_clicked" id="myTab3" role="tablist">
                                         <li class="nav-item w-50 text-center">
                                           <a class="nav-link active show" id="phone_number-tab" data-toggle="tab" href="#phone_number" role="tab" aria-controls="phone_number" aria-selected="true">Phone Number</a>
@@ -58,7 +58,12 @@
                                         <div class="tab-pane fade active show" id="phone_number" role="tabpanel" aria-labelledby="phone_number-tab">
                                             <div class="form-group">
                                                 <label for="phone">Phone Number</label>
-                                                <input id="phone_form" type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number') }}" autofocus>
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">+62</div>
+                                                    </div>
+                                                    <input id="phone_form" type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" value="{{ old('phone_number') }}" autofocus>
+                                                </div>
 
                                                 @error('phone_number')
                                                     <span class="invalid-feedback" role="alert">
