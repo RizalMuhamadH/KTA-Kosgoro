@@ -314,14 +314,11 @@ class MemberController extends Controller
             $ktp = Str::slug($ktp).'.'.$request->file('id_card')->extension();
             $request->file('id_card')->storeAs("data_member/".$user->id,$ktp,'public');
 
-            $qr_code = "QR Code ".$request->name;
-            $qr_code = Str::slug($qr_code).".svg";
-            QrCode::format('svg')->generate(route('members.detail',['id'   => $user->id]), public_path('storage/data_member/'.$user->id.'/'.$qr_code));
+            
 
             $tmp_user = User::where('id', $user->id)->with(['Position','Province','District','SubDistrict','Village'])->first();
             $tmp_user->photo = $photo;
             $tmp_user->id_card_photo = $ktp;
-            $tmp_user->qrcode = $qr_code;
             $tmp_user->save();
 
             Mail::to($tmp_user->email)->send(new RegisteredMember($tmp_user));
@@ -486,7 +483,7 @@ class MemberController extends Controller
 
         if($request->status == "1"){
             if($request->option == "0"){
-                $user->no_member = date("Y.md.").$user->id;
+                $user->no_member = "NA-K57.".$user->id;
             }else if($request->option == "1"){
                 $request->validate([
                     'no_member' => 'required|min:16|max:16|unique:members,no_member,'.$user->id,
@@ -494,6 +491,10 @@ class MemberController extends Controller
                 $user->no_member = $request->no_member;
             }
             $type = "Diverifikasi";
+            $qr_code = "QR Code ".$user->name;
+            $qr_code = Str::slug($qr_code).".svg";
+            QrCode::format('svg')->generate($user->id, public_path('storage/data_member/'.$user->id.'/'.$qr_code));
+            $user->qrcode = $qr_code;
             $user->status = 1;
             Mail::to($user->email)->send(new VerifiedMember($user));
 
