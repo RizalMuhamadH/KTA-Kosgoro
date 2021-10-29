@@ -499,7 +499,7 @@
     <script>
         $(document).ready(function(){
             const auth_user = "{{Auth::user()->position_id}}";
-            var generated_no_member = "{{date('Y.dm.')}}";
+            var generated_no_member = "NA-K57.";
             var image_source = "{{asset('storage/data_member')}}";
             var table_member = $("#table_member").DataTable({
                 destroy: true,
@@ -1047,13 +1047,16 @@
 
 
             $("#table_member").on('click','.btn_verified',function(){
+                id = "";
                 $.ajax({
                     url: "{{route('members.detail')}}",
                     dataType: 'JSON',
                     method: 'GET',
                     data: {id: $(this).data('id'), cms:true},
                     success:function(data){
-                        generated_no_member = generated_no_member+data.id
+                        new_id = data.id.toString();
+                        new_id = new_id.padStart(3,'0');
+                        generated_no_member = generated_no_member+new_id
                         $("#current_no_member").val(generated_no_member);
                         $("#verified_member_id").val(data.id);
                         $("#VerifiedMember").modal('show');

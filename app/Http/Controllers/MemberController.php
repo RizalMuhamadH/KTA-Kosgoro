@@ -314,7 +314,7 @@ class MemberController extends Controller
             $ktp = Str::slug($ktp).'.'.$request->file('id_card')->extension();
             $request->file('id_card')->storeAs("data_member/".$user->id,$ktp,'public');
 
-            
+
 
             $tmp_user = User::where('id', $user->id)->with(['Position','Province','District','SubDistrict','Village'])->first();
             $tmp_user->photo = $photo;
@@ -483,7 +483,7 @@ class MemberController extends Controller
 
         if($request->status == "1"){
             if($request->option == "0"){
-                $user->no_member = "NA-K57.".$user->id;
+                $user->no_member = "NA-K57.".str_pad($user->id,3,"0","STR_PAD_LEFT");
             }else if($request->option == "1"){
                 $request->validate([
                     'no_member' => 'required|min:16|max:16|unique:members,no_member,'.$user->id,
