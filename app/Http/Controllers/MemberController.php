@@ -483,7 +483,7 @@ class MemberController extends Controller
 
         if($request->status == "1"){
             if($request->option == "0"){
-                $user->no_member = "NA-K57.".str_pad($user->id,3,"0","STR_PAD_LEFT");
+                $user->no_member = "NA-K57.".str_pad($user->id,3,"0",STR_PAD_LEFT);
             }else if($request->option == "1"){
                 $request->validate([
                     'no_member' => 'required|min:16|max:16|unique:members,no_member,'.$user->id,
