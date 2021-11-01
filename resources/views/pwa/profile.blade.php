@@ -53,7 +53,7 @@
                 <div class="card-content">
                     <div class="row">
                         <div class="col s3">
-
+                            
                         </div>
                         <div class="col s9">
                             <img class="img-right" src="{{asset('assets/pwa/img/logo-kta.png')}}"><br>
@@ -76,11 +76,11 @@
             </div>
         </div>
     </div>
-    <div class="center container">
-        {{-- <a class="btn-small btn-register btn-large kosgoro-bg">
+    {{-- <div class="center container">
+        <a class="btn-small btn-register btn-large kosgoro-bg">
             Cetak Kartu Anggota
-        </a> --}}
-    </div>
+        </a>
+    </div> --}}
 @endsection
 
 @push('page-javascript')
