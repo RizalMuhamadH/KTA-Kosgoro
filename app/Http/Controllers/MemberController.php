@@ -103,7 +103,7 @@ class MemberController extends Controller
     public function generate_otp(Request $request){
         $tmp_user = "";
         if($request->email != null){
-            $tmp_user = User::where('email',$request->email)->first();
+            $tmp_user = User::where('email','ilike','%'.$request->email.'%')->first();
         }else if($request->phone_number != null){
             $tmp_user = User::where('phone',$request->phone_number)->first();
         }
@@ -143,7 +143,7 @@ class MemberController extends Controller
                     'code'  =>  400,
                     'type'  =>  'error',
                 ];
-                return response($result, 200);
+                return response($result, 400);
             }
         }
     }
@@ -262,7 +262,6 @@ class MemberController extends Controller
                 'village'       =>  'required',
                 'post_code'     =>  'required',
                 'address'       =>  'required',
-                'position'      =>  'required',
                 'photo'         =>  'required|max:1024|mimes:jpg,jpeg,png',
                 'id_card'       =>  'required|max:1024|mimes:jpg,jpeg,png',
             );
@@ -386,7 +385,6 @@ class MemberController extends Controller
                 'village'       =>  'required',
                 'post_code'     =>  'required',
                 'address'       =>  'required',
-                'position'      =>  'required',
             );
 
             $validator = Validator::make($request->all(),$rules);
@@ -425,7 +423,9 @@ class MemberController extends Controller
         $user->district_id      = $request->district;
         $user->sub_district_id  = $request->sub_district;
         $user->village_id       = $request->village;
-        $user->position_id      = $request->position;
+        if(isset($request->position)){
+            $user->position_id      = $request->position;
+        }
 
         $result = $user->save();
         $newEncrypter = new \Illuminate\Encryption\Encrypter(  str_replace("-","",$user->token), Config::get('app.cipher') );

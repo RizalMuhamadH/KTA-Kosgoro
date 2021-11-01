@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\ComplimentaryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\PWAController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/', [App\Http\Controllers\PWAController::class, 'index']);
+Route::get('/admin',[HomeController::class,'index'])->name('admin_home');
 Route::post('/member/login',[MemberController::class,'login'])->name('member_login');
 Route::post('/generate_otp',[MemberController::class,'generate_otp'])->name('generate_otp');
 Auth::routes();
@@ -39,6 +42,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/getVillage',[ComplimentaryController::class,'getVillage'])->name('getVillage');
         Route::get('/getDashoardData',[ComplimentaryController::class,'getCountDashboard'])->name('getDashoardData');
     });
+});
+
+Route::prefix('pwa')->name('pwa.')->group(function () {
+    Route::get('/',[PWAController::class,'index'])->name('index');
+    Route::get('/otp/{email}',[PWAController::class,'otp'])->name('otp');
+    Route::middleware(['auth.pwa'])->group(function () {
+        Route::get('/register/{id}',[PWAController::class,'register'])->name('register');
+        Route::get('/profile/{email}',[PWAController::class,'profile'])->name('profile');
+        Route::get('/update/{id}',[PWAController::class,'update'])->name('update');
+        Route::put('/store_update',[PWAController::class,'download_kta'])->name('store_update');
+    });
+    Route::post('/logout',[PWAController::class,'logout'])->name('logout');
 });
 
 

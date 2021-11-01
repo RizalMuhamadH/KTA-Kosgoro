@@ -1,0 +1,17 @@
+{
+  "name": "Kosgoro",
+  "short_name": "Kosgoro",
+  "start_url": "/index.php",
+  "background_color": "white",
+  "description": "KTA Kosgoro",
+  "display": "fullscreen",
+  "theme_color": "white",
+  "icons": [
+      {
+          "src": "logo.PNG",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any maskable"
+      }
+  ]
+}

@@ -1,0 +1,162 @@
+.preloader{
+    background-image: url('/img/background-login.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.img-center {
+    display: block;
+    margin-bottom: auto;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.kosgoro-text{
+    color: #E4831A;
+}
+
+.profile-name{
+    color: #E4831A;
+    font-size: 17px;
+}
+
+.kosgoro-bg{
+    background-color: #E4831A;
+}
+
+.top-head{
+    margin-top: 50px;
+    font-style: bold;
+    font-size: 18px;
+}
+
+.top-head-button{
+    margin-top: 20px;
+    font-style: bold;
+    font-size: 18px;
+}
+
+.top-head-button-profile{
+    z-index: 8;
+    position: absolute;
+    margin-top: 20px;
+    /* margin-left: 20px; */
+    font-style: bold;
+    font-size: 18px;
+}
+
+.menu{
+    z-index: 8;
+    margin-top: 20px;
+}
+
+body {
+    font-family: 'Roboto';
+}
+
+.bottom{
+    position: relative;
+    bottom: 0px;
+    display: block;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.btn-register{
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-right: auto;
+}
+
+
+input{
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid black;
+    box-shadow: 2cm;
+}
+
+.form-otp{
+    margin-top:50px;
+}
+
+
+.back{
+    position:absolute;
+    z-index: 1;
+    width: 100%;
+    height: auto;
+    /* overflow-x: hidden; */
+}
+
+.front{
+    z-index: 2;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+}
+
+.logo-profile{
+    z-index: 3;
+    position: absolute;
+    top: 15%;
+    left: 35%;
+    width: 30%;
+    height: auto;
+    /* overflow-x: hidden; */
+}
+
+.top{
+   height: auto;
+   width: 100%;
+}
+
+.card-between{
+    z-index: 5;
+    position: relative;
+    margin-top: 4%;
+    margin-bottom: 10%;
+
+}
+
+.card-round{
+    border-radius: 10px;
+}
+
+.card-kta{
+    position: relative;
+    /* background-image: url('/public/assets/pwa/img/kta-background.png'); */
+    background-size: cover;
+    background-position: center;
+    height: auto;
+}
+
+.card-kta .img-right{
+    display: block;
+    position: absolute;
+    right: 5%;
+}
+
+.card-kta .img-left{
+    display: block;
+    position: absolute;
+    right: 5%;
+    bottom: 10%;
+    width: 40px;
+}
+
+.profile-pict{
+    position: absolute;
+    z-index: 6;
+    margin-top: -12%;
+    margin-left: -3%;
+    max-width: calc(100%*0.25);
+    max-height: 90%;
+    margin-bottom: -10%;
+}
