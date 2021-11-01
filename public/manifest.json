@@ -1,7 +1,7 @@
 {
   "name": "Kosgoro",
   "short_name": "Kosgoro",
-  "start_url": "/index.php",
+  "start_url": "/",
   "background_color": "white",
   "description": "KTA Kosgoro",
   "display": "fullscreen",
