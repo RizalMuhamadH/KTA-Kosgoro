@@ -14,19 +14,6 @@
                         @csrf
                     </form>
                 </span>
-                {{-- <a href="#" class="waves-effect waves-light top-head-button-profile white-text"><i class="material-icons sidenav-trigger" data-target="side-menu">menu</i></a>
-                <ul id="side-menu" class="sidenav side-menu">
-                    <li><a href="{{route('pwa.index')}}" class="waves-effect">Home</a></li>
-                    <li><div class="divider"></div></li>
-                    <li><a href="/pages/contact.html" class="waves-effect">
-                        <i class="material-icons">assignment_ind</i>Update Data</a>
-                    </li>
-                    <li><div class="divider"></div></li>
-                    <li>
-                        <a href="/pages/contact.html" class="waves-effect">
-                        <i class="material-icons">exit_to_app</i>Logout</a>
-                    </li>
-                </ul> --}}
             </div>
             <img src="{{asset('assets/pwa/img/kta-top-white.png')}}" alt="" class="front"/>
             <img src="{{asset('assets/pwa/img/logo.png')}}" class="logo-profile"/>

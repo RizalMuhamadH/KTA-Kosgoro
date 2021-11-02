@@ -52,7 +52,7 @@
                 }
                 if(valid){
                     $.ajax({
-                        url: "{{route('member_login')}}",
+                        url: "{{env('APP_URL')}}/member/login",
                         data: {
                             email: email,
                             phone_number: null,
