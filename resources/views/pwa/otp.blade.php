@@ -7,27 +7,15 @@
         </div>
         <h6 class="kosgoro-text text-darken-1"> <b>Masukan 6 digit kode verifikasi yang dikirimkan ke email</b></h6>
 
-        <form class="col s12 form-otp" action="{{route('member_login')}}" method="POST" id="form_login_pwa">
+        <form class="col s12 form-otp digit-group" data-group-name="digits" action="{{route('member_login')}}" method="POST" id="form_login_pwa">
             @csrf
             <div class="row">
-                <div class="input-field col s2">
-                    <input type="text" id="digit-1" name="digit-1" data-next="digit-2" maxlength="1" required class="validate" />
-                </div>
-                <div class="input-field col s2">
-                    <input type="text" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" maxlength="1"  required class="validate"/>
-                </div>
-                <div class="input-field col s2">
-                    <input type="text" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" maxlength="1" required class="validate" />
-                </div>
-                <div class="input-field col s2">
-                    <input type="text" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-4"  maxlength="1" required class="validate"/>
-                </div>
-                <div class="input-field col s2">
-                    <input type="text" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-5" maxlength="1" required class="validate"/>
-                </div>
-                <div class="input-field col s2">
-                    <input type="text" id="digit-6" name="digit-6" data-previous="digit-5" required class="validate"/>
-                </div>
+                <input type="text" id="digit-1" name="digit-1" required class="validate col s2 otp" style="max-width:13%; margin-left:4%; margin-right:1%;" />
+                <input type="text" id="digit-2" name="digit-2" required class="validate col s2 otp" style="max-width:13%; margin-left:1%; margin-right:1%;"/>
+                <input type="text" id="digit-3" name="digit-3"required class="validate col s2 otp" style="max-width:13%; margin-left:1%; margin-right:1%;" />
+                <input type="text" id="digit-4" name="digit-4" required class="validate col s2 otp" style="max-width:13%; margin-left:1%; margin-right:1%;"/>
+                <input type="text" id="digit-5" name="digit-5"required class="validate col s2 otp" style="max-width:13%; margin-left:1%; margin-right:1%;"/>
+                <input type="text" id="digit-6" name="digit-6"required class="validate col s2 otp" style="max-width:13%; margin-left:1%; margin-right:1%;"/>
                 <input type="hidden" name="email" id="email" value="{{$email}}">
                 <input type="hidden" name="phone_number" id="phone_number">
                 <input type="hidden" name="pwa" value="true">
@@ -84,6 +72,12 @@
                         }
                     })
                 }
+            });
+
+           
+            $('.otp').attr('maxlength', 1);
+            $('.otp').on('keyup', function(e) {
+                    $(this).next().focus();
             });
         })
     </script>
