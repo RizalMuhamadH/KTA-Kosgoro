@@ -1048,6 +1048,7 @@
 
             $("#table_member").on('click','.btn_verified',function(){
                 id = "";
+                $("#current_no_member").val('');
                 $.ajax({
                     url: "{{env('APP_URL')}}/members/detail",
                     dataType: 'JSON',
