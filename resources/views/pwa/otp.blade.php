@@ -77,7 +77,11 @@
            
             $('.otp').attr('maxlength', 1);
             $('.otp').on('keyup', function(e) {
+                if(e.keyCode === 8 || e.keyCode === 37) {
+                    $(this).before().focus();
+                } else if((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
                     $(this).next().focus();
+                }
             });
         })
     </script>

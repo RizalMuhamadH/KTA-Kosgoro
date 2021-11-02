@@ -18,13 +18,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [App\Http\Controllers\PWAController::class, 'index']);
-Route::get('/admin',[HomeController::class,'index'])->name('admin_home');
+Route::get('/admin',[HomeController::class,'index'])->name('admin_home')->middleware(['admin']);
 Route::post('/member/login',[MemberController::class,'login'])->name('member_login');
 Route::post('/generate_otp',[MemberController::class,'generate_otp'])->name('generate_otp');
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['admin']);
     Route::prefix('/members')->name('members.')->group(function () {
         Route::get('/',[MemberController::class,'index'])->name('index');
         Route::post('/store',[MemberController::class,'store'])->name('store');
