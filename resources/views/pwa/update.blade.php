@@ -111,7 +111,7 @@
                             var form = $("#form_edit_member")[0];
                             var formData = new FormData(form);
                             $.ajax({
-                                url: $("#form_edit_member").attr('action'),
+                                url: "{{env('APP_URL')}}/members/update",
                                 method: 'POST',
                                 dataType: 'JSON',
                                 processData: false,
@@ -157,7 +157,7 @@
                 minimumInputLength: 1,
                 placeholder: 'Masukan Keyword Province',
                 ajax:{
-                    url: "{{route('getProvince')}}",
+                    url: "{{env('APP_URL')}}/complementary/getProvince",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -177,7 +177,7 @@
                 minimumInputLength: 1,
                 placeholder: 'Masukan Keyword Kota / Kabupaten',
                 ajax:{
-                    url: "{{route('getDistrict')}}",
+                    url: "{{env('APP_URL')}}/complementary/getDistrict",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -198,7 +198,7 @@
                 minimumInputLength: 1,
                 placeholder: 'Masukan Keyword Kecamatan',
                 ajax:{
-                    url: "{{route('getSubDistrict')}}",
+                    url: "{{env('APP_URL')}}/complementary/getSubDistrict",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -219,7 +219,7 @@
                 minimumInputLength: 1,
                 placeholder: 'Masukan Keyword Kelurahan / Desa',
                 ajax:{
-                    url: "{{route('getVillage')}}",
+                    url: "{{env('APP_URL')}}/complementary/getVillage",
                     dataType: 'json',
                     data: function(params){
                         return{

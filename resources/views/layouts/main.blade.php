@@ -224,7 +224,7 @@
                     placeholder: 'Masukan Keyword Province',
                     dropdownParent: $("#ModalProfile"),
                     ajax:{
-                        url: "{{route('getProvince')}}",
+                        url: "{{env('APP_URL')}}/complementary/getProvince",
                         dataType: 'json',
                         data: function(params){
                             return{
@@ -246,7 +246,7 @@
                     placeholder: 'Masukan Keyword Kota / Kabupaten',
                     dropdownParent: $("#ModalProfile"),
                     ajax:{
-                        url: "{{route('getDistrict')}}",
+                        url: "{{env('APP_URL')}}/complementary/getDistrict",
                         dataType: 'json',
                         data: function(params){
                             return{
@@ -269,7 +269,7 @@
                     placeholder: 'Masukan Keyword Kecamatan',
                     dropdownParent: $("#ModalProfile"),
                     ajax:{
-                        url: "{{route('getSubDistrict')}}",
+                        url: "{{env('APP_URL')}}/complementary/getSubDistrict",
                         dataType: 'json',
                         data: function(params){
                             return{
@@ -292,7 +292,7 @@
                     placeholder: 'Masukan Keyword Kelurahan / Desa',
                     dropdownParent: $("#ModalProfile"),
                     ajax:{
-                        url: "{{route('getVillage')}}",
+                        url: "{{env('APP_URL')}}/complementary/getVillage",
                         dataType: 'json',
                         data: function(params){
                             return{
@@ -330,7 +330,7 @@
                                 var form = $("#form_update_profile")[0];
                                 var formData = new FormData(form);
                                 $.ajax({
-                                    url: $("#form_update_profile").attr('action'),
+                                    url: "{{env('APP_URL')}}/members/update",
                                     method: 'POST',
                                     dataType: 'JSON',
                                     processData: false,

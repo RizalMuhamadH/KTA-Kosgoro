@@ -79,7 +79,7 @@
     <script>
         $(document).ready(function(){
             $.ajax({
-                url: "{{route('getDashoardData')}}",
+                url: "{{env('APP_URL')}}/complementary/getDashoardData",
                 dataType: "JSON",
                 method: "GET",
                 success:function(data){

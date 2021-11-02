@@ -519,7 +519,7 @@
                 order: [[1, "asc"]],
                 processing: true,
                 ajax: {
-                    url: "{{route('members.datatables')}}",
+                    url: "{{env('APP_URL')}}/members/datatables",
                     method: "GET",
                     dataType: "JSON",
                     data: {
@@ -627,7 +627,7 @@
                 allowClear: true,
                 placeholder: 'Masukan Keyword Province',
                 ajax:{
-                    url: "{{route('getProvince')}}",
+                    url: "{{env('APP_URL')}}/complementary/getProvince",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -648,7 +648,7 @@
                 allowClear: true,
                 placeholder: 'Masukan Keyword Kota / Kabupaten',
                 ajax:{
-                    url: "{{route('getDistrict')}}",
+                    url: "{{env('APP_URL')}}/complementary/getDistrict",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -670,7 +670,7 @@
                 allowClear: true,
                 placeholder: 'Masukan Keyword Kecamatan',
                 ajax:{
-                    url: "{{route('getSubDistrict')}}",
+                    url: "{{env('APP_URL')}}/complementary/getSubDistrict",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -692,7 +692,7 @@
                 allowClear: true,
                 placeholder: 'Masukan Keyword Kelurahan / Desa',
                 ajax:{
-                    url: "{{route('getVillage')}}",
+                    url: "{{env('APP_URL')}}/complementary/getVillage",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -715,7 +715,7 @@
                 placeholder: 'Masukan Keyword Province',
                 dropdownParent: $("#NewMember"),
                 ajax:{
-                    url: "{{route('getProvince')}}",
+                    url: "{{env('APP_URL')}}/complementary/getProvince",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -737,7 +737,7 @@
                 placeholder: 'Masukan Keyword Kota / Kabupaten',
                 dropdownParent: $("#NewMember"),
                 ajax:{
-                    url: "{{route('getDistrict')}}",
+                    url: "{{env('APP_URL')}}/complementary/getDistrict",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -760,7 +760,7 @@
                 placeholder: 'Masukan Keyword Kecamatan',
                 dropdownParent: $("#NewMember"),
                 ajax:{
-                    url: "{{route('getSubDistrict')}}",
+                    url: "{{env('APP_URL')}}/complementary/getSubDistrict",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -783,7 +783,7 @@
                 placeholder: 'Masukan Keyword Kelurahan / Desa',
                 dropdownParent: $("#NewMember"),
                 ajax:{
-                    url: "{{route('getVillage')}}",
+                    url: "{{env('APP_URL')}}/complementary/getVillage",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -806,7 +806,7 @@
                 placeholder: 'Masukan Keyword Province',
                 dropdownParent: $("#EditMember"),
                 ajax:{
-                    url: "{{route('getProvince')}}",
+                    url: "{{env('APP_URL')}}/complementary/getProvince",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -828,7 +828,7 @@
                 placeholder: 'Masukan Keyword Kota / Kabupaten',
                 dropdownParent: $("#EditMember"),
                 ajax:{
-                    url: "{{route('getDistrict')}}",
+                    url: "{{env('APP_URL')}}/complementary/getDistrict",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -851,7 +851,7 @@
                 placeholder: 'Masukan Keyword Kecamatan',
                 dropdownParent: $("#EditMember"),
                 ajax:{
-                    url: "{{route('getSubDistrict')}}",
+                    url: "{{env('APP_URL')}}/complementary/getSubDistrict",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -874,7 +874,7 @@
                 placeholder: 'Masukan Keyword Kelurahan / Desa',
                 dropdownParent: $("#EditMember"),
                 ajax:{
-                    url: "{{route('getVillage')}}",
+                    url: "{{env('APP_URL')}}/complementary/getVillage",
                     dataType: 'json',
                     data: function(params){
                         return{
@@ -906,7 +906,7 @@
                             var form = $("#form_new_member")[0];
                             var formData = new FormData(form);
                             $.ajax({
-                                url: $("#form_new_member").attr('action'),
+                                url: "{{env('APP_URL')}}/members/store",
                                 method: 'POST',
                                 dataType: 'JSON',
                                 processData: false,
@@ -936,7 +936,7 @@
 
             $("#table_member").on('click','.btn_detail',function(){
                 $.ajax({
-                    url: "{{route('members.detail')}}",
+                    url: "{{env('APP_URL')}}/members/detail",
                     dataType: 'JSON',
                     method: 'GET',
                     data: {id: $(this).data('id'), cms:true},
@@ -966,7 +966,7 @@
 
             $("#table_member").on('click','.btn_edit',function(){
                 $.ajax({
-                    url: "{{route('members.detail')}}",
+                    url: "{{env('APP_URL')}}/members/detail",
                     dataType: 'JSON',
                     method: 'GET',
                     data: {id: $(this).data('id'), cms:true},
@@ -1016,7 +1016,7 @@
                             var form = $("#form_edit_member")[0];
                             var formData = new FormData(form);
                             $.ajax({
-                                url: $("#form_edit_member").attr('action'),
+                                url: "{{env('APP_URL')}}/members/update",
                                 method: 'POST',
                                 dataType: 'JSON',
                                 processData: false,
@@ -1049,7 +1049,7 @@
             $("#table_member").on('click','.btn_verified',function(){
                 id = "";
                 $.ajax({
-                    url: "{{route('members.detail')}}",
+                    url: "{{env('APP_URL')}}/members/detail",
                     dataType: 'JSON',
                     method: 'GET',
                     data: {id: $(this).data('id'), cms:true},
@@ -1089,7 +1089,7 @@
                     .then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: $("#form_verified_member").attr('action'),
+                                url: "{{env('APP_URL')}}/members/change_status",
                                 method: 'POST',
                                 dataType: 'JSON',
                                 data: $("#form_verified_member").serialize(),
@@ -1163,7 +1163,7 @@
                     .then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: $("#form_change_status").attr('action'),
+                                url: "{{env('APP_URL')}}/members/change_status",
                                 method: 'POST',
                                 dataType: 'json',
                                 data: $("#form_change_status").serialize(),
@@ -1197,7 +1197,7 @@
                     .then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: $("#form_change_status").attr('action'),
+                                url: "{{env('APP_URL')}}/members/change_status",
                                 method: 'POST',
                                 dataType: 'json',
                                 data: $("#form_change_status").serialize(),
