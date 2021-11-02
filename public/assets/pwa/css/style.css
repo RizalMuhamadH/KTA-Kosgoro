@@ -136,12 +136,13 @@ input{
     display: block;
     position: absolute;
     right: 5%;
+    max-width: 30px;
 }
 
 .card-kta .img-left{
     display: block;
     position: absolute;
-    right: 5%;
+    right: 15%;
     bottom: 10%;
     width: 40px;
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class PWAController extends Controller
 {
@@ -47,6 +48,15 @@ class PWAController extends Controller
                 'SubDistrict',
                 'Village'])->first()
             ]);
+    }
+
+    public function download_kta($id){
+        $pdf = PDF::loadView('pdf.kta',[
+            'data'  => User::where('id',$id)->with(['SubDistrict'])->first()
+        ]);
+        $pdf->setPaper('A7','landscape');
+        
+        return $pdf->download('kta.pdf');
     }
 
 }

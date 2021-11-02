@@ -63,11 +63,11 @@
             </div>
         </div>
     </div>
-    {{-- <div class="center container">
-        <a class="btn-small btn-register btn-large kosgoro-bg">
+    <div class="center container">
+        <a class="btn-small btn-register btn-large kosgoro-bg btn-print" href="{{route('pwa.download_kta',['id' => $data->id])}}">
             Cetak Kartu Anggota
         </a>
-    </div> --}}
+    </div>
 @endsection
 
 @push('page-javascript')
@@ -94,5 +94,9 @@
 
         }
         @endif
+
+        $(".btn-profile").on('click',function(){
+
+        })
     </script>
 @endpush

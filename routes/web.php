@@ -51,7 +51,8 @@ Route::prefix('pwa')->name('pwa.')->group(function () {
         Route::get('/register/{id}',[PWAController::class,'register'])->name('register');
         Route::get('/profile/{email}',[PWAController::class,'profile'])->name('profile');
         Route::get('/update/{id}',[PWAController::class,'update'])->name('update');
-        Route::put('/store_update',[PWAController::class,'download_kta'])->name('store_update');
+        Route::put('/store_update',[PWAController::class,'store_update'])->name('store_update');
+        Route::get('/download_kta/{id}',[PWAController::class,'download_kta'])->name('download_kta');
     });
     Route::post('/logout',[PWAController::class,'logout'])->name('logout');
 });
