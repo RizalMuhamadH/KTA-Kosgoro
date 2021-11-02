@@ -13,20 +13,15 @@
         <span class="text-grey">
             Masuk menggunakan email terlebih dahulu
         </span>
+        <div class="input-field col">
+            <input placeholder="Email" id="email" type="email" class="validate">
+        </div>
 
-
-        <form class="col s12" method="POST">
-            @csrf
-            <div class="input-field col">
-                <input placeholder="Email" id="email" type="email" class="validate">
-            </div>
-
-            <div class="center">
-                <button class="btn bottom btn-small kosgoro-bg pwa_generate" type="button">
-                    Masuk
-                </button>
-            </div>
-        </form>
+        <div class="center">
+            <button class="btn bottom btn-small kosgoro-bg pwa_generate" type="button">
+                Masuk
+            </button>
+        </div>
     </div>
 @endsection
 

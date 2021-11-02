@@ -7,7 +7,7 @@
         </div>
         <h6 class="kosgoro-text text-darken-1"> <b>Masukan 6 digit kode verifikasi yang dikirimkan ke email</b></h6>
 
-        <form class="col s12 form-otp digit-group" data-group-name="digits" action="{{route('member_login')}}" method="POST" id="form_login_pwa">
+        <div class="col s12 form-otp digit-group">
             @csrf
             <div class="row">
                 <input type="text" id="digit-1" name="digit-1" required class="validate col s2 otp" style="max-width:13%; margin-left:4%; margin-right:1%;" />
@@ -25,7 +25,7 @@
                     Kirim Ulang :
                 </small>
             </span>
-        </form>
+        </div>
         <div class="center ">
             <button class="bottom btn-small btn-large kosgoro-bg btn_login" type="button">
             Masuk
