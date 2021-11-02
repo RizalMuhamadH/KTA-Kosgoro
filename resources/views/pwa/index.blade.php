@@ -36,7 +36,7 @@
             $(".pwa_generate").on('click',function(){
                 email = $("#email").val();
                 $.ajax({
-                    url: "{{route('generate_otp')}}",
+                    url: "{{env('APP_URL')}}/generate_otp",
                     data: {
                         email: email,
                         phone_number: null,
