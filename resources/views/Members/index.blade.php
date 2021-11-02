@@ -1057,8 +1057,8 @@
                     success:function(data){
                         new_id = (data.id+15).toString();
                         new_id = new_id.padStart(3,'0');
-                        generated_no_member = generated_no_member+new_id;
-                        $("#current_no_member").val(generated_no_member);
+                        tmp_no_member = generated_no_member+new_id;
+                        $("#current_no_member").val(tmp_no_member);
                         $("#verified_member_id").val(data.id);
                         $("#VerifiedMember").modal('show');
                     }
