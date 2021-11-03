@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/datatables',[MemberController::class,'datatables'])->name('datatables');
         Route::get('/detail',[MemberController::class, 'detail'])->name('detail');
         Route::get('/dashboard',[MemberController::class,'dashboard'])->name('dashboard');
+        Route::delete('/delete',[MemberController::class,'delete'])->name('delete');
     });
 
     Route::prefix('/complementary')->group(function () {

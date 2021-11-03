@@ -108,7 +108,7 @@ class MemberController extends Controller
             $tmp_user = User::where('phone',$request->phone_number)->first();
         }
         if($tmp_user != null){
-            $otp_before_hash = Str::random(6);
+            $otp_before_hash = mt_rand(111111,999999);
             $tmp_user->password = Hash::make($otp_before_hash);
             $tmp_user->otp_used = 0;
             $tmp_user->save();
@@ -261,7 +261,6 @@ class MemberController extends Controller
                 'district'      =>  'required',
                 'sub_district'  =>  'required',
                 'village'       =>  'required',
-                'post_code'     =>  'required',
                 'address'       =>  'required',
             );
 
@@ -609,5 +608,9 @@ class MemberController extends Controller
             ];
             return response($response, 200);
         }
+    }
+
+    public function delete(Request $request){
+
     }
 }
