@@ -235,6 +235,7 @@ class MemberController extends Controller
     }
 
     public function store(Request $request){
+        $is_file = 0;
         if(!isset($request->api)){
             $request->validate([
                 'name'          => 'required',
@@ -262,8 +263,6 @@ class MemberController extends Controller
                 'village'       =>  'required',
                 'post_code'     =>  'required',
                 'address'       =>  'required',
-                'photo'         =>  'required|max:1024|mimes:jpg,jpeg,png',
-                'id_card'       =>  'required|max:1024|mimes:jpg,jpeg,png',
             );
 
             $validator = Validator::make($request->all(),$rules);
@@ -305,20 +304,25 @@ class MemberController extends Controller
 
         $result = $user->save();
         if($result){
-            $photo = "Pas Photo ".$request->name;
-            $photo = Str::slug($photo).'.'.$request->file('photo')->extension();
-            $request->file('photo')->storeAs("data_member/".$user->id,$photo,'public');
-
-            $ktp = "KTP ".$request->name;
-            $ktp = Str::slug($ktp).'.'.$request->file('id_card')->extension();
-            $request->file('id_card')->storeAs("data_member/".$user->id,$ktp,'public');
-
-
-
             $tmp_user = User::where('id', $user->id)->with(['Position','Province','District','SubDistrict','Village'])->first();
-            $tmp_user->photo = $photo;
-            $tmp_user->id_card_photo = $ktp;
-            $tmp_user->save();
+            if($request->hasFile('photo')){
+                $photo = "Pas Photo ".$request->name;
+                $photo = Str::slug($photo).'.'.$request->file('photo')->extension();
+                $request->file('photo')->storeAs("data_member/".$user->id,$photo,'public');
+                $tmp_user->photo = $photo;
+                $is_file++;
+            }
+
+            if($request->hasFile('id_card')){
+                $ktp = "KTP ".$request->name;
+                $ktp = Str::slug($ktp).'.'.$request->file('id_card')->extension();
+                $request->file('id_card')->storeAs("data_member/".$user->id,$ktp,'public');
+                $tmp_user->id_card_photo = $ktp;
+                $is_file++;
+            }
+            if($is_file > 0){
+                $tmp_user->save();
+            }
 
             Mail::to($tmp_user->email)->send(new RegisteredMember($tmp_user));
             if(!$request->api){
