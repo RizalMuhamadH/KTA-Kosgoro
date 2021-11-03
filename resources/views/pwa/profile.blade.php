@@ -28,7 +28,7 @@
                         <div class="col s9">
                             <span>{{$data->no_member}}</span> <br>
                             <span class="profile-name">{{$data->name}}</span> <br>
-                            <span>{{$data->SubDistrict['name']}}</span>
+                            <span>{{$data->District['name']}} / {{$data->SubDistrict['name']}}</span>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                             <img class="img-right" src="https://app.kosgoro57.id/assets/pwa/img/logo-kta.png"><br>
                             <span>{{$data->no_member}} </span> <br>
                             <span class="profile-name">{{$data->name}} </span> <br>
-                            <span>{{$data->SubDistrict['name']}}</span> <br>
+                            <span>{{$data->District['name']}} / {{$data->SubDistrict['name']}}</span> <br>
                             <span>
                                 @if($data->status == "0")
                                     Belum Diverifikasi

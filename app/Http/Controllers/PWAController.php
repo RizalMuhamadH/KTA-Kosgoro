@@ -12,7 +12,7 @@ class PWAController extends Controller
     public function index(){
         if(Auth::user() != null){
             return view('pwa.profile',[
-                'data'  =>  User::where('email',Auth::user()->email)->with(['SubDistrict'])->first()
+                'data'  =>  User::where('email',Auth::user()->email)->with(['District','SubDistrict'])->first()
             ]);
         }else{
             return view('pwa.index');
@@ -36,7 +36,7 @@ class PWAController extends Controller
 
     public function profile(Request $request){
         return view('pwa.profile',[
-            'data'  =>  User::where('email',$request->email)->with(['SubDistrict'])->first()
+            'data'  =>  User::where('email',$request->email)->with(['District','SubDistrict'])->first()
         ]);
     }
 
