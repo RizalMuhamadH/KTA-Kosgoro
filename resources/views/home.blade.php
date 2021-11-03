@@ -302,7 +302,6 @@
                             <div class="col-lg-6 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label> Photo </label>
-                                    <image src="" class="img-fluid" id="photo_edit">
                                     <input type="file" class="form-control form-control-file" name="photo" accept="image/*" id="photo_edit">
                                 </div>
                             </div>
