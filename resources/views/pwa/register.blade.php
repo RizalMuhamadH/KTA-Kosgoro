@@ -52,12 +52,12 @@
         </div>
         <div class="input-field ">
             <label for="post_code">Kode Pos</label>
-            <input type="text" name="post_code" id="post_code" required class="validate" />
+            <input type="text" name="post_code" id="post_code" class="validate" />
         </div>
         <div class="file-field input-field">
             <div class="btn">
               <span>Pas Photo</span>
-              <input type="file" name="photo" accept="image/*" required class="validate">
+              <input type="file" name="photo" accept="image/*" class="validate">
             </div>
             <div class="file-path-wrapper">
               <input class="file-path validate" type="text">
@@ -66,7 +66,7 @@
         <div class="file-field input-field">
             <div class="btn">
               <span>Photo KTP</span>
-              <input type="file" name="id_card" accept="image/*" required class="validate">
+              <input type="file" name="id_card" accept="image/*" class="validate">
             </div>
             <div class="file-path-wrapper">
               <input class="file-path validate" type="text">
