@@ -611,11 +611,12 @@ class MemberController extends Controller
     }
 
     public function delete(Request $request){
-        $result = User::where('no_member',$request->no_member)->delete();
+        $tmp = User::find($request->id_member);
+        $result = User::where('id',$request->id_member)->delete();
         if($result){
             $params = [
                 'index' => 'members',
-                'id'    => $request->no_member,
+                'id'    => $tmp->no_member,
             ];
             $es = $this->repository->delete($params);
             echo json_encode($result = array([

@@ -381,7 +381,7 @@
         style="display: none">
         @csrf
         <div class="laravel_input">
-            <input type="hidden" name="no_member" id="no_member_delete">
+            <input type="hidden" name="id_member" id="id_member_delete">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="_method" value="DELETE">
         </div>
@@ -467,7 +467,7 @@
                                 button_return = "<div class='btn-group'>";
                                 button_return = button_return + "<button class='btn btn-info btn_detail' title='Detail Member' data-id='"+row.id+"'> <i class='fas fa-eye'> </i> </button>";
                                 button_return = button_return + "<button class='btn btn-warning btn_edit' title='Edit Member' data-id='"+row.id+"'> <i class='fas fa-pen'> </i> </button>";
-                                button_return = button_return + "<button class='btn btn-secondary btn_delete' title='Delete Member' data-nomember='"+row.no_member+"'> <i class='fas fa-trash text-dark'> </i> </button>";
+                                button_return = button_return + "<button class='btn btn-secondary btn_delete' title='Delete Member' data-id='"+row.id+"'> <i class='fas fa-trash text-dark'> </i> </button>";
                                 if(row.status == "0"){
                                     button_return = button_return + "<button class='btn btn-success btn_verified' title='Verified Member' data-id='"+row.id+"'> <i class='fas fa-check'> </i> </button>";
                                     button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
@@ -486,7 +486,7 @@
                                 button_return = "<div class='btn-group'>";
                                 button_return = button_return + "<button class='btn btn-info btn_detail' title='Detail Member' data-id='"+row.id+"'> <i class='fas fa-eye'> </i> </button>";
                                 button_return = button_return + "<button class='btn btn-warning btn_edit' title='Edit Member' data-id='"+row.id+"'> <i class='fas fa-pen'> </i> </button>";
-                                button_return = button_return + "<button class='btn btn-secondary btn_delete' title='Delete Member' data-nomember='"+row.no_member+"'> <i class='fas fa-trash text-dark'> </i> </button>";
+                                button_return = button_return + "<button class='btn btn-secondary btn_delete' title='Delete Member' data-id='"+row.id+"'> <i class='fas fa-trash text-dark'> </i> </button>";
                                 if(row.status == "0"){
                                     button_return = button_return + "<button class='btn btn-success btn_verified' title='Verified Member' data-id='"+row.id+"'> <i class='fas fa-check'> </i> </button>";
                                     button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
@@ -1000,7 +1000,7 @@
             });
 
             $("#table_member_dashboard").on('click', ".btn_delete", function() {
-                $("#no_member_delete").val($(this).data('nomember'));
+                $("#id_member_delete").val($(this).data('id'));
                 form_url = "{{env('APP_URL')}}/members/delete";
                 Swal.fire({
                         title: "Apakah anda yakin?",
