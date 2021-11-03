@@ -28,6 +28,8 @@ class AuthPWA
                 if(Auth::user()->id != $request->id){
                     return redirect()->route('pwa.index')->with('message','Silahkan Login Terlebih Dahulu');
                 }
+            }else{
+                return redirect()->route('pwa.profile',['email' => Auth::user()->email]);
             }
         }
         return $next($request);

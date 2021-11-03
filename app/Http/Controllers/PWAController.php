@@ -10,7 +10,13 @@ use PDF;
 class PWAController extends Controller
 {
     public function index(){
-        return view('pwa.index');
+        if(Auth::user() != null){
+            return view('pwa.profile',[
+                'data'  =>  User::where('email',Auth::user()->email)->with(['SubDistrict'])->first()
+            ]);
+        }else{
+            return view('pwa.index');
+        }
     }
 
     public function otp(Request $request){
@@ -36,7 +42,7 @@ class PWAController extends Controller
 
     public function logout(){
         Auth::logout();
-        return redirect()->route('pwa.index');
+        return redirect('/');
     }
 
     public function update($id){

@@ -46,8 +46,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::prefix('pwa')->name('pwa.')->group(function () {
-    Route::get('/',[PWAController::class,'index'])->name('index');
     Route::get('/otp/{email}',[PWAController::class,'otp'])->name('otp');
+    Route::get('/',[PWAController::class,'index'])->name('index');
     Route::middleware(['auth.pwa'])->group(function () {
         Route::get('/register/{id}',[PWAController::class,'register'])->name('register');
         Route::get('/profile/{email}',[PWAController::class,'profile'])->name('profile');

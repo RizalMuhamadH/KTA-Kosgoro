@@ -3,7 +3,7 @@
 @section('body')
 <div class="container">
     <div class="top-head-button">
-        <a href="#" class="waves-effect waves-light" onclick="window.history.back()"><i class="material-icons">arrow_back</i></a>
+        <a href="{{env('APP_URL')}}/pwa/profile/{{$data->email}}" class="waves-effect waves-light"><i class="material-icons">arrow_back</i></a>
     </div>
     <h6 class="kosgoro-text text-darken-1"> <b>Daftar</b></h6>
     <form class="col s12" method="POST" id="form_edit_member" action="{{route('members.update')}}" enctype="multipart/form-data">
@@ -17,11 +17,11 @@
         </div>
         <div class="input-field ">
             <label for="nik">NIK</label>
-            <input type="text" id="nik" name="nik" required class="validate" minlength="16" maxlength="16" value="{{$data->nik}}" />
+            <input type="text" id="nik" name="nik" required class="validate" minlength="16" readonly maxlength="16" value="{{$data->nik}}" />
         </div>
         <div class="input-field">
             <label for="nama_lengkap">Nama Lengkap</label>
-            <input type="text" name="name" id="nama_lengkap" required class="validate" value="{{$data->name}}" />
+            <input type="text" name="name" id="nama_lengkap" required class="validate" readonly value="{{$data->name}}" />
         </div>
         <div class="input-field">
             <label for="telepon">Telepon</label>
@@ -29,36 +29,36 @@
         </div>
         <div class="input-field">
             <label for="alamat">Alamat</label>
-            <input type="text" name="address" id="alamat" required class="validate" value="{{$data->address}}" />
+            <input type="text" name="address" id="alamat" required class="validate" readonly value="{{$data->address}}" />
         </div>
         <div class="input-field">
-            <select id="province" name="province" class="province">
+            <select id="province" name="province" class="province" disabled>
                 <option value="" disabled>Pilih Provinsi Anda</option>
                 <option value="{{$data->province_id}}" selected> {{$data->Province['name']}} </option>
             </select>
         </div>
         <div class="input-field">
-            <select id="district" name="district" class="district">
+            <select id="district" name="district" class="district" disabled>
                 <option value="" disabled>Pilih Kabupaten/Kota Anda</option>
                 <option value="{{$data->district_id}}" selected> {{$data->District['name']}} </option>
             </select>
         </div>
         <div class="input-field">
-            <select id="sub_district" name="sub_district" class="sub_district">
+            <select id="sub_district" name="sub_district" class="sub_district" disabled>
                 <option value="" disabled>Pilih Kecamatan Anda</option>
                 <option value="{{$data->sub_district_id}}" selected> {{$data->SubDistrict['name']}} </option>
 
             </select>
         </div>
         <div class="input-field">
-            <select id="vilalge" name="village" class="village center">
+            <select id="vilalge" name="village" class="village center" disabled>
                 <option value="" disabled>Pilih Desa Anda</option>
                 <option value="{{$data->village_id}}" selected> {{$data->Village['name']}} </option>
             </select>
         </div>
         <div class="input-field ">
             <label for="post_code">Kode Pos</label>
-            <input type="text" name="post_code" id="post_code" value="{{$data->post_code}}" required class="validate" />
+            <input type="text" name="post_code" id="post_code" value="{{$data->post_code}}" readonly required class="validate" />
         </div>
         <div class="file-field input-field">
             <div class="btn">

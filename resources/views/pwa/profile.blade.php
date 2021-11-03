@@ -2,7 +2,7 @@
 
 @section('body')
     <div class="row">
-        <div class="top" style="background-image: url('{{asset('assets/pwa/img/kta-top-orange.png')}}'); background-size:cover; background-repeat:no-repeat">
+        <div class="top" style="background-image: url('https://app.kosgoro57.id/assets/pwa/img/kta-top-orange.png'); background-size:cover; background-repeat:no-repeat">
 
             <div class="container">
                 <a class="left white-text menu" href="{{route('pwa.update',['id'    => $data->id])}}">
@@ -15,15 +15,15 @@
                     </form>
                 </span>
             </div>
-            <img src="{{asset('assets/pwa/img/kta-top-white.png')}}" alt="" class="front"/>
-            <img src="{{asset('assets/pwa/img/logo.png')}}" class="logo-profile"/>
+            <img src="https://app.kosgoro57.id/assets/pwa/img/kta-top-white.png" alt="" class="front"/>
+            <img src="https://app.kosgoro57.id/assets/pwa/img/logo.png" class="logo-profile"/>
         </div>
         <div class="container card-between">
             <div class="card card-round">
                 <div class="card-content">
                     <div class="row">
                         <div class="col s3">
-                            <img src="{{asset('storage/data_member/'.$data->id.'/'.$data->photo)}}" onerror="this.src='{{asset('assets/pwa/img/photo-default.png')}}'" alt="" class="profile-pict"/>
+                            <img src="https://app.kosgoro57.id/storage/data_member/{{$data->id}}/{{$data->photo}}" alt="" class="profile-pict"/>
                         </div>
                         <div class="col s9">
                             <span>{{$data->no_member}}</span> <br>
@@ -36,14 +36,14 @@
         </div>
         <div class="container">
             <span class="profile-name">Kartu Anggota</span>
-            <div class="card card-kta card-round" style="background-image: url('{{asset('assets/pwa/img/kta-background.png')}}'); ">
+            <div class="card card-kta card-round" style="background-image: url('https://app.kosgoro57.id/assets/pwa/img/kta-background.png'); ">
                 <div class="card-content">
                     <div class="row">
                         <div class="col s3">
                             
                         </div>
                         <div class="col s9">
-                            <img class="img-right" src="{{asset('assets/pwa/img/logo-kta.png')}}"><br>
+                            <img class="img-right" src="https://app.kosgoro57.id/assets/pwa/img/logo-kta.png"><br>
                             <span>{{$data->no_member}} </span> <br>
                             <span class="profile-name">{{$data->name}} </span> <br>
                             <span>{{$data->SubDistrict['name']}}</span> <br>
@@ -56,7 +56,7 @@
                                     Blocked
                                 @endif
                             </span>
-                            <img src="{{asset('storage/data_member/'.$data->id.'/'.$data->qrcode)}}" onerror="this.src='{{asset('assets/pwa/img/qrcode-default.png')}}'" alt="" class="img-left"/>
+                            <img src="https://app.kosgoro57.id/storage/data_member/{{$data->id}}/{{$data->qrcode}}"  alt="" class="img-left"/>
                         </div>
                     </div>
                 </div>
