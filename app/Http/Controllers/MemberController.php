@@ -490,7 +490,7 @@ class MemberController extends Controller
                 $user->no_member = "NA-K57.".str_pad($user->id+15,3,"0",STR_PAD_LEFT);
             }else if($request->option == "1"){
                 $request->validate([
-                    'no_member' => 'required|min:16|max:16|unique:members,no_member,'.$user->id,
+                    'no_member' => 'required|unique:members,no_member,'.$user->id,
                 ]);
                 $user->no_member = $request->no_member;
             }
