@@ -300,6 +300,9 @@
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12 col-sm-12">
+
+                            </div>
+                            <div class="col-lg-6 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label> Photo </label>
                                     <input type="file" class="form-control form-control-file" name="photo" accept="image/*" id="photo_edit">
@@ -314,13 +317,13 @@
                             <div class="col-lg-6 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label> Photo Sekarang</label>
-                                    <image src="" class="img-fluid" id="photo_edit">
+                                    <image src="" style="width: 50%; height:auto" id="photo_edit">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-12 col-sm-12">
                                 <div class="form-group">
                                     <label> Photo KTP Sekarang </label>
-                                    <image src="" class="img-fluid" id="id_card_edit">
+                                    <image src="" style="width: 50%; height:auto"  class="img-fluid" id="id_card_edit">
                                 </div>
                             </div>
                             <div class="laravel-input">
