@@ -493,6 +493,16 @@
             <input type="hidden" name="_method" value="PUT">
         </div>
     </form>
+
+    <form action="{{ route('members.delete') }}" method="POST" id="form_delete_member"
+        style="display: none">
+        @csrf
+        <div class="laravel_input">
+            <input type="hidden" name="no_member" id="no_member_delete">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="_method" value="DELETE">
+        </div>
+    </form>
 @endsection
 
 @push('custom_js')
@@ -570,7 +580,7 @@
                                 button_return = "<div class='btn-group'>";
                                 button_return = button_return + "<button class='btn btn-info btn_detail' title='Detail Member' data-id='"+row.id+"'> <i class='fas fa-eye'> </i> </button>";
                                 button_return = button_return + "<button class='btn btn-warning btn_edit' title='Edit Member' data-id='"+row.id+"'> <i class='fas fa-pen'> </i> </button>";
-                                button_return = button_return + "<button class='btn btn-secondary btn_delete' title='Delete Member' data-id='"+row.id+"'> <i class='fas fa-trash text-dark'> </i> </button>";
+                                button_return = button_return + "<button class='btn btn-secondary btn_delete' title='Delete Member' data-nomember='"+row.no_member+"'> <i class='fas fa-trash text-dark'> </i> </button>";
                                 if(row.status == "0"){
                                     button_return = button_return + "<button class='btn btn-success btn_verified' title='Verified Member' data-id='"+row.id+"'> <i class='fas fa-check'> </i> </button>";
                                     button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
@@ -589,7 +599,7 @@
                                 button_return = "<div class='btn-group'>";
                                 button_return = button_return + "<button class='btn btn-info btn_detail' title='Detail Member' data-id='"+row.id+"'> <i class='fas fa-eye'> </i> </button>";
                                 button_return = button_return + "<button class='btn btn-warning btn_edit' title='Edit Member' data-id='"+row.id+"'> <i class='fas fa-pen'> </i> </button>";
-                                
+                                button_return = button_return + "<button class='btn btn-secondary btn_delete' title='Delete Member' data-nomember='"+row.no_member+"'> <i class='fas fa-trash text-dark'> </i> </button>";
                                 if(row.status == "0"){
                                     button_return = button_return + "<button class='btn btn-success btn_verified' title='Verified Member' data-id='"+row.id+"'> <i class='fas fa-check'> </i> </button>";
                                     button_return = button_return + "<button class='btn btn-danger btn_block' title='Block Member' data-id='"+row.id+"'> <i class='fas fa-lock'> </i> </button>";
@@ -1117,39 +1127,6 @@
                     })
             });
 
-            // $("#table_member").on('click', ".btn_verified", function() {
-            //     $("#change_status_id").val($(this).data('id'));
-            //     $("#status_change").val(1);
-            //     Swal.fire({
-            //             title: "Apakah anda yakin?",
-            //             text: "Anda akan memverifikasi data",
-            //             showCancelButton: 'true',
-            //             icon: "warning",
-            //             buttons: true,
-            //             dangerMode: true,
-            //             allowOutsideClick: false,
-            //         })
-            //         .then((result) => {
-            //             if (result.isConfirmed) {
-            //                 $.ajax({
-            //                     url: $("#form_change_status").attr('action'),
-            //                     method: 'POST',
-            //                     dataType: 'json',
-            //                     data: $("#form_change_status").serialize(),
-            //                     success: function(result) {
-            //                         if (result[0].code) {
-            //                             Swal.fire("Done!", result[0].message, result[0]
-            //                                 .type);
-            //                         } else {
-            //                             Swal.fire("Error!", result[0].message, result[0]
-            //                                 .type);
-            //                         }
-            //                         table_member.ajax.reload();
-            //                     }
-            //                 });
-            //             }
-            //         });
-            // })
 
             $("#table_member").on('click', ".btn_block", function() {
                 $("#change_status_id").val($(this).data('id'));
@@ -1210,6 +1187,40 @@
                                             .type);
                                     } else {
                                         Swal.fire("Error!", res.message, res
+                                            .type);
+                                    }
+                                    table_member.ajax.reload();
+                                }
+                            });
+                        }
+                    });
+            });
+
+            $("#table_member").on('click', ".btn_delete", function() {
+                $("#no_member_delete").val($(this).data('nomember'));
+                form_url = "{{env('APP_URL')}}/members/delete";
+                Swal.fire({
+                        title: "Apakah anda yakin?",
+                        text: "Data yang sudah dihapus, tidak bisa dikembalikan",
+                        showCancelButton: 'true',
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                        allowOutsideClick: false,
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: form_url,
+                                method: 'POST',
+                                dataType: 'json',
+                                data: $("#form_delete_member").serialize(),
+                                success: function(result) {
+                                    if (result[0].code) {
+                                        Swal.fire("Done!", result[0].message, result[0]
+                                            .type);
+                                    } else {
+                                        Swal.fire("Error!", result[0].message, result[0]
                                             .type);
                                     }
                                     table_member.ajax.reload();

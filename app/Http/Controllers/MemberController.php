@@ -126,7 +126,7 @@ class MemberController extends Controller
                 $new_user->email = $request->email;
                 $new_user->save();
 
-                $otp_before_hash = Str::random(6);
+                $otp_before_hash = mt_rand(111111,999999);
                 $new_user->password = Hash::make($otp_before_hash);
                 $new_user->otp_used = 0;
                 $new_user->save();
@@ -287,7 +287,7 @@ class MemberController extends Controller
         $user->email            = $request->email;
         $user->phone            = $request->phone;
         $user->nik              = $request->nik;
-        $user->no_member        = Str::random(12);
+        $user->no_member        = mt_rand(111111,999999);
         $user->photo            = "Photo";
         $user->id_card_photo    = "Id Card Photo";
         $user->address          = $request->address;
@@ -611,6 +611,25 @@ class MemberController extends Controller
     }
 
     public function delete(Request $request){
+        $result = User::where('no_member',$request->no_member)->delete();
+        if($result){
+            $params = [
+                'index' => 'members',
+                'id'    => $request->no_member,
+            ];
+            $es = $this->repository->delete($params);
+            echo json_encode($result = array([
+                "message"   => "Data berhasil dihapus",
+                "type"      => "success",
+                "code"    => true]));
+                
+        }else{
+            echo json_encode($result = array([
+                "message"   => "Data gagal dihapus",
+                "type"      => "error",
+                "code"    => false]));
+        }
 
+        
     }
 }
