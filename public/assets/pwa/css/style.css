@@ -148,13 +148,12 @@ input{
 }
 
 .profile-pict{
-    position: absolute;
-    z-index: 6;
-    margin-top: -12%;
-    margin-left: -3%;
-    max-width: calc(100%*0.25);
-    max-height: 90%;
-    margin-bottom: -10%;
+    margin-top: -8vh;
+    max-width: 15vw;
+    max-height: 30vh;
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
 }
 
 @media screen and (min-width:641px) {
@@ -198,22 +197,22 @@ input{
     
     }
 
-    .profile-pict{
-        position: absolute;
-        z-index: 6;
-        margin-top: -15%;
-        margin-left: 1%;
-        max-width: 30vh;
-        max-height: 20vh;
-        margin-bottom: -10%;
-    }
-
+   
     .card-kta{
         position: relative;
         /* background-image: url('/public/assets/pwa/img/kta-background.png'); */
         background-size: cover;
         background-position: center;
         height: auto;
+    }
+
+    .profile-pict{
+        margin-top: -20vh;
+        max-width: 15vw;
+        max-height: 30vh;
+        margin-right: auto;
+        margin-left: auto;
+        display: block;
     }
 } 
 
@@ -227,6 +226,15 @@ input{
         height: auto;
         /* overflow-x: hidden; */
         
+    }
+
+    .profile-pict{
+        margin-top: -8vh;
+        max-width: 15vw;
+        max-height: 20vh;
+        margin-right: auto;
+        margin-left: auto;
+        display: block;
     }
 
     .top{
@@ -258,15 +266,7 @@ input{
     
     }
 
-    .profile-pict{
-        position: absolute;
-        z-index: 6;
-        margin-top: -10%;
-        margin-left: 4%;
-        max-width: 40vh;
-        max-height: 30vh;
-        margin-bottom: -10%;
-    }
+    
 
     .card-kta{
         position: relative;
