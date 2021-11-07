@@ -591,7 +591,7 @@ class MemberController extends Controller
                 'data'      =>  [
                     'status'    =>  $user->status,
                     'name'      =>  $user->name,
-                    'district'  =>  $user->District['name'],
+                    'province'  =>  $user->Province['name'],
                     'photo'     =>  $user->id.'/'.$user->photo,
                     'token'     =>  $user->token,
                     'active'    =>  $user->active,
