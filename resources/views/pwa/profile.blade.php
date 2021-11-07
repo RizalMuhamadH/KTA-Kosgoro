@@ -36,7 +36,7 @@
         </div>
         <div class="container">
             <span class="profile-name">Kartu Anggota</span>
-            <div class="card card-kta card-round" style="background-image: url('https://app.kosgoro57.id/assets/pwa/img/kta-background.png'); background-size:contain; background-repeat:no-repeat; background-position:left">
+            <div class="card card-kta card-round" style="background-image: url('https://app.kosgoro57.id/assets/pwa/img/kta-bg.png'); background-size:contain; background-repeat:no-repeat; background-position:left">
                 <div class="card-content" >
                     <div class="row">
                         <div class="col s9 offset-s3 offset-m1 offset-l1">
@@ -60,11 +60,11 @@
             </div>
         </div>
     </div>
-    {{-- <div class="center container">
+    <div class="center container">
         <a class="btn-small btn-register btn-large kosgoro-bg btn-print" href="{{route('pwa.download_kta',['id' => $data->id])}}">
             Cetak Kartu Anggota
         </a>
-    </div> --}}
+    </div>
 @endsection
 
 @push('page-javascript')
