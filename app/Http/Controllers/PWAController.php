@@ -36,7 +36,7 @@ class PWAController extends Controller
 
     public function profile(Request $request){
         return view('pwa.profile',[
-            'data'  =>  User::where('email',$request->email)->with(['District','SubDistrict'])->first()
+            'data'  =>  User::where('email',$request->email)->with(['Province'])->first()
         ]);
     }
 
@@ -58,10 +58,11 @@ class PWAController extends Controller
 
     public function download_kta($id){
         $pdf = PDF::loadView('pdf.kta',[
-            'data'  => User::where('id',$id)->with(['SubDistrict'])->first()
+            'data'  => User::where('id',$id)->with(['Province'])->first()
         ]);
-        $pdf->setPaper('A7','landscape');
-        
+        $customPaper = array(0,0,140.38,283.80);
+        $pdf->setPaper($customPaper,'landscape');
+
         return $pdf->download('kta.pdf');
     }
 

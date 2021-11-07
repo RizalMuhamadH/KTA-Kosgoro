@@ -1,6 +1,6 @@
     <style>
         .container {
-            margin: 0 0;
+            margin: 0 0 0 0;
             max-width: 1280px;
             width: 90%;
         }
@@ -14,7 +14,7 @@
             transition: box-shadow .25s, -webkit-box-shadow .25s;
             border-radius: 2px;
         }
-       
+
         .profile-name{
             color: #E4831A;
             font-size: 17px;
@@ -33,7 +33,7 @@
         }
 
         .card .card-content {
-            padding: 12px;
+            padding: 10px;
             border-radius: 0 0 2px 2px;
         }
 
@@ -64,6 +64,10 @@
             right: auto;
         }
 
+        .row .col.offset-s3 {
+            margin-left: 25%;
+        }
+
         .row .col.s9 {
             width: 75%;
             margin-left: auto;
@@ -84,40 +88,39 @@
             bottom: 0px;
             width: 40px;
         }
-        
+
         @page{
-            margin: 0;
-            overflow-y: hidden;
-            overflow-x: hidden;
+            margin-bottom: 0;
+            margin-top: 0;
+            margin-right: 0;
+            margin-left: 0;
         }
     </style>
-   <div class="card card-kta card-round" style="background-image: url('{{public_path('assets/pwa/img/kta-background.png')}}'); ">
-    <div class="card-content">
-        <div class="row">
-            <div class="col s3">
-                
-            </div>
-            <div class="col s9">
-                <img class="img-right" src="{{public_path('assets/pwa/img/logo-kta.png')}}"><br>
-                <span>{{$data->no_member}} </span> <br>
-                <span class="profile-name">{{$data->name}} </span> <br>
-                <span>{{$data->SubDistrict['name']}}</span> <br>
-                <span>
-                    @if($data->status == "0")
-                        Belum Diverifikasi
-                    @elseif($data->status == "1")
-                        Sudah Terverifikasi
-                    @elseif($data->status == "2")
-                        Blocked
-                    @endif
-                </span>
-                <img src="{{public_path('assets/pwa/img/qrcode-default.png')}}" 
-                    onerror="this.src='{{public_path('assets/pwa/img/qrcode-default.png')}}'" 
-                    alt="" 
-                    class="img-left"/>
+    <body style="overflow-y: hidden">
+        <div class="card card-kta card-round" style="background-image: url('https://app.kasgoro57.id/assets/pwa/img/kta-background.png'); background-size:contain; background-repeat:no-repeat; background-position:left; border:1px solid black">
+            <div class="card-content">
+                <div class="row">
+                    <div class="col s9 offset-s3">
+                        <img class="img-right" src="https://app.kasgoro57.id/assets/pwa/img/logo-kta.png'"><br>
+                        <span>{{$data->no_member}} </span> <br>
+                        <span class="profile-name">{{$data->name}} </span> <br>
+                        <span>{{$data->Province['name']}}</span> <br>
+                        <span>
+                            @if($data->status == "0")
+                                Belum Diverifikasi
+                            @elseif($data->status == "1")
+                                Sudah Terverifikasi
+                            @elseif($data->status == "2")
+                                Blocked
+                            @endif
+                        </span>
+                        <img src="https://app.kosgoro57.id/storage/data_member/{{$data->id}}/{{$data->qrcode}}"
+                            onerror="this.src='https://app.kasgoro57.id/assets/pwa/img/qrcode-default.png'"
+                            alt=""
+                            class="img-left"/>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-
+    </body>
 

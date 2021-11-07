@@ -165,7 +165,7 @@ input{
         width: 10%;
         height: auto;
         /* overflow-x: hidden; */
-        
+
     }
 
     .top{
@@ -194,10 +194,10 @@ input{
         position: relative;
         margin-top: -8%;
         margin-bottom: 5%;
-    
+
     }
 
-   
+
     .card-kta{
         position: relative;
         /* background-image: url('/public/assets/pwa/img/kta-background.png'); */
@@ -214,7 +214,7 @@ input{
         margin-left: auto;
         display: block;
     }
-} 
+}
 
 @media screen and (min-width:961px) {
     .logo-profile{
@@ -222,10 +222,14 @@ input{
         position: absolute;
         top: 10%;
         left: 45%;
-        width: 10%;
+        width: 15vh;
         height: auto;
         /* overflow-x: hidden; */
-        
+
+    }
+
+    .menu{
+        font-size: 20px;
     }
 
     .profile-pict{
@@ -263,10 +267,10 @@ input{
         position: relative;
         margin-top: -3%;
         margin-bottom: 5%;
-    
+
     }
 
-    
+
 
     .card-kta{
         position: relative;
@@ -275,7 +279,7 @@ input{
         background-position: center;
         height: auto;
     }
-}   
+}
 
 
 
