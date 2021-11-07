@@ -36,7 +36,7 @@
         </div>
         <div class="container">
             <span class="profile-name">Kartu Anggota</span>
-            <div class="card card-kta card-round" style="background-image: url('https://app.kasgoro57.id/assets/pwa/img/kta-background.png'); background-size:contain; background-repeat:no-repeat; background-position:left">
+            <div class="card card-kta card-round" style="background-image: url('https://app.kosgoro57.id/assets/pwa/img/kta-background.png'); background-size:contain; background-repeat:no-repeat; background-position:left">
                 <div class="card-content" >
                     <div class="row">
                         <div class="col s9 offset-s3 offset-m1 offset-l1">

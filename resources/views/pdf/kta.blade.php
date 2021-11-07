@@ -97,11 +97,11 @@
         }
     </style>
     <body style="overflow-y: hidden">
-        <div class="card card-kta card-round" style="background-image: url('https://app.kasgoro57.id/assets/pwa/img/kta-background.png'); background-size:contain; background-repeat:no-repeat; background-position:left; border:1px solid black">
+        <div class="card card-kta card-round" style="background-image: url('https://app.kosgoro57.id/assets/pwa/img/kta-background.png'); background-size:contain; background-repeat:no-repeat; background-position:left; border:1px solid black">
             <div class="card-content">
                 <div class="row">
                     <div class="col s9 offset-s3">
-                        <img class="img-right" src="https://app.kasgoro57.id/assets/pwa/img/logo-kta.png'"><br>
+                        <img class="img-right" src="https://app.kosgoro57.id/assets/pwa/img/logo-kta.png'"><br>
                         <span>{{$data->no_member}} </span> <br>
                         <span class="profile-name">{{$data->name}} </span> <br>
                         <span>{{$data->Province['name']}}</span> <br>
