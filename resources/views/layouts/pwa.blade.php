@@ -20,6 +20,20 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{asset('assets/select2/js/select2-materialize.js')}}"> </script>
+
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+            OneSignal.init({
+            appId: "80f72aa5-0a29-4b29-bf0e-46732c65720e",
+            safari_web_id: "",
+            notifyButton: {
+                enable: true,
+            },
+            });
+        });
+    </script>
     <title>{{config('app.name')}}</title>
 </head>
 <body>
