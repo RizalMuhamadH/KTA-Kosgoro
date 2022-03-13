@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PWAController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,4 +60,6 @@ Route::prefix('pwa')->name('pwa.')->group(function () {
 });
 
 
-
+Route::get('/privacy-policy', function (Request $request) {
+    return view('policy');
+});
