@@ -1233,6 +1233,17 @@
                                     table_member.ajax.reload();
                                 }
                             });
+                        },
+                        error: function(result) {
+                            var response = JSON.parse(result.responseText)
+                            var message = '';
+                            $.each(response.errors, function(key, values) {
+                                $.each(values, function(key, value) {
+                                    message = message + value +
+                                        "<br>";
+                                })
+                            })
+                            Swal.fire("Error!", message, 'error', 10);
                         }
                     });
             })
