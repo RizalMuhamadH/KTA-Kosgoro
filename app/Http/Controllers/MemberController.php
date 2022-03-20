@@ -153,7 +153,7 @@ class MemberController extends Controller
     }
 
     public function login(Request $request){
-
+        $tmp_user = array();
         if(isset($request->password)){
             $request->validate([
                 'password'   =>  'required'
@@ -166,8 +166,9 @@ class MemberController extends Controller
 
         if(isset($request->cms)){
             if($request->email != null){
-                if(Auth::attempt(['email' => $request->email, 'otp' => $request->password, 'otp_used' => 0, 'active' => 1, 'position_id' => array('1','2')])){
-                    $tmp_user = User::where('email',$request->email)->first();
+                $tmp_user = User::where(['email' => $request->email,  'otp_used' => 0, 'active' => 1, 'position_id' => array('1','2')])->first();
+                if(Hash::check($request->password,$tmp_user->otp)){
+                    Auth::login($tmp_user);
                     $tmp_user->otp_used = 1;
                     $tmp_user->save();
                     return redirect('/home');
@@ -175,8 +176,9 @@ class MemberController extends Controller
                     return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
                 }
             }elseif($request->phone_number != null){
-                if(Auth::attempt(['phone' => $request->phone_number, 'otp' => $request->password, 'otp_used' => 0, 'active' => 1, 'position_id' => array(',1','2')])){
-                    $tmp_user = User::where('phone',$request->phone_number)->first();
+                $tmp_user = User::where(['phone' => $request->phone_number,  'otp_used' => 0, 'active' => 1, 'position_id' => array('1','2')])->first();
+                if(Hash::check($request->password,$tmp_user->otp)){
+                    Auth::login($tmp_user);
                     $tmp_user->otp_used = 1;
                     $tmp_user->save();
                     return redirect('/home');
@@ -194,8 +196,9 @@ class MemberController extends Controller
             }
         }else{
             if($request->email != null){
-                if(Auth::attempt(['email' => $request->email, 'otp' => $request->password, 'otp_used' => 0, 'active' => 1])){
-                    $tmp_user = User::where('email',$request->email)->first();
+                $tmp_user = User::where(['email' => $request->email,  'otp_used' => 0, 'active' => 1])->first();
+                if(Hash::check($request->password,$tmp_user->otp)){
+                    Auth::login($tmp_user);
                     $tmp_user->otp_used = 1;
                     $tmp_user->save();
                     $response = [
@@ -217,8 +220,9 @@ class MemberController extends Controller
                     return response($response, 200);
                 }
             }elseif($request->phone_number != null){
-                if(Auth::attempt(['phone' => $request->phone_number, 'otp' => $request->password, 'otp_used' => 0, 'active' => 1])){
-                    $tmp_user = User::where('phone',$request->phone_number)->first();
+                $tmp_user = User::where(['phone' => $request->phone_number,  'otp_used' => 0, 'active' => 1])->first();
+                if(Hash::check($request->password,$tmp_user->otp)){
+                    Auth::login($tmp_user);
                     $tmp_user->otp_used = 1;
                     $tmp_user->save();
                     $response = [
