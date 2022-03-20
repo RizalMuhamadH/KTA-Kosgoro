@@ -44,7 +44,7 @@ class MemberController extends Controller
             $tmp = User::where('id',$request->id)->with(['Province','District','SubDistrict','Village','Position'])->first();
         }
         if(isset($request->cms)){
-            echo json_encode($tmp);
+            return response()->json($tmp,200);
         }else{
             if($tmp != null){
 
@@ -97,10 +97,14 @@ class MemberController extends Controller
 
 
         $result['data'] = $tmp_query->with(['Province','District','SubDistrict','Village','Position'])->get();
-        echo json_encode($result);
+        return response()->json($result,200);
     }
 
     public function generate_otp(Request $request){
+        $request->validate([
+            'email' =>  'required|email'
+        ]);
+
         $tmp_user = "";
         if($request->email != null){
             $tmp_user = User::where('email','ilike','%'.$request->email.'%')->first();
@@ -109,7 +113,7 @@ class MemberController extends Controller
         }
         if($tmp_user != null){
             $otp_before_hash = mt_rand(111111,999999);
-            $tmp_user->password = Hash::make($otp_before_hash);
+            $tmp_user->otp = Hash::make($otp_before_hash);
             $tmp_user->otp_used = 0;
             $tmp_user->save();
             Mail::to($tmp_user->email)->send(new SendOTPMail($tmp_user, $otp_before_hash));
@@ -122,12 +126,12 @@ class MemberController extends Controller
         }else{
             if($request->email != null){
                 $new_user = new User();
-                $new_user->name = $request->email;
-                $new_user->email = $request->email;
+                $new_user->name     = $request->email;
+                $new_user->email    = $request->email;
                 $new_user->save();
 
                 $otp_before_hash = mt_rand(111111,999999);
-                $new_user->password = Hash::make($otp_before_hash);
+                $new_user->otp = Hash::make($otp_before_hash);
                 $new_user->otp_used = 0;
                 $new_user->save();
                 Mail::to($new_user->email)->send(new SendOTPMail($new_user, $otp_before_hash));
@@ -149,13 +153,20 @@ class MemberController extends Controller
     }
 
     public function login(Request $request){
-        $request->validate([
-            'password'   =>  'required'
-        ]);
+
+        if(isset($request->password)){
+            $request->validate([
+                'password'   =>  'required'
+            ]);
+        }elseif(isset($request->otp)){
+            $request->validate([
+                'otp'       =>  'required'
+            ]);
+        }
 
         if(isset($request->cms)){
             if($request->email != null){
-                if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'otp_used' => 0, 'active' => 1, 'position_id' => array('1','2')])){
+                if(Auth::attempt(['email' => $request->email, 'otp' => $request->password, 'otp_used' => 0, 'active' => 1, 'position_id' => array('1','2')])){
                     $tmp_user = User::where('email',$request->email)->first();
                     $tmp_user->otp_used = 1;
                     $tmp_user->save();
@@ -164,7 +175,7 @@ class MemberController extends Controller
                     return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
                 }
             }elseif($request->phone_number != null){
-                if(Auth::attempt(['phone' => $request->phone_number, 'password' => $request->password, 'otp_used' => 0, 'active' => 1, 'position_id' => array(',1','2')])){
+                if(Auth::attempt(['phone' => $request->phone_number, 'otp' => $request->password, 'otp_used' => 0, 'active' => 1, 'position_id' => array(',1','2')])){
                     $tmp_user = User::where('phone',$request->phone_number)->first();
                     $tmp_user->otp_used = 1;
                     $tmp_user->save();
@@ -172,12 +183,18 @@ class MemberController extends Controller
                 }else{
                     return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
                 }
+            }elseif($request->username != null){
+                if(Auth::attempt(['username' => $request->username, 'password' => $request->password, 'active' => 1, 'position_id' => array('1','2')])){
+                    return redirect('/home');
+                }else{
+                    return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor username dan password');
+                }
             }else{
                 return redirect()->back()->with('message','Login gagal, silahkan cek kembali nomor telepon/email dan otp anda');
             }
         }else{
             if($request->email != null){
-                if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'otp_used' => 0, 'active' => 1])){
+                if(Auth::attempt(['email' => $request->email, 'otp' => $request->password, 'otp_used' => 0, 'active' => 1])){
                     $tmp_user = User::where('email',$request->email)->first();
                     $tmp_user->otp_used = 1;
                     $tmp_user->save();
@@ -200,10 +217,30 @@ class MemberController extends Controller
                     return response($response, 200);
                 }
             }elseif($request->phone_number != null){
-                if(Auth::attempt(['phone' => $request->phone_number, 'password' => $request->password, 'otp_used' => 0, 'active' => 1])){
+                if(Auth::attempt(['phone' => $request->phone_number, 'otp' => $request->password, 'otp_used' => 0, 'active' => 1])){
                     $tmp_user = User::where('phone',$request->phone_number)->first();
                     $tmp_user->otp_used = 1;
                     $tmp_user->save();
+                    $response = [
+                        'token'         => $tmp_user->token,
+                        'status'        => $tmp_user->status,
+                        'code'          => 200,
+                        'no_member'     => $tmp_user->no_member
+                    ];
+                    return response($response, 200);
+                }else{
+                     $response = [
+                        'token'         => null,
+                        'status'        => null,
+                        'code'          => 500,
+                        'no_member'     => null,
+                        'message'       => "Gagal login"
+                    ];
+                    return response($response, 200);
+                }
+            }elseif($request->username != null){
+                if(Auth::attempt(['username' => $request->username, 'password' => $request->password, 'active' => 1])){
+                    $tmp_user = User::where('username',$request->username)->first();
                     $response = [
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
@@ -235,10 +272,11 @@ class MemberController extends Controller
     }
 
     public function store(Request $request){
+        $user = null;
         $is_file = 0;
         if(!isset($request->api)){
             $request->validate([
-                'name'          => 'required',
+                'name'          =>  'required',
                 'email'         =>  'required|email|unique:members,email',
                 'phone'         =>  'required|min:10|max:13|unique:members,phone',
                 'nik'           =>  'required|min:16|max:16|unique:members,nik',
@@ -276,7 +314,12 @@ class MemberController extends Controller
         }
 
         if(isset($request->api)){
-            $user =  User::where('email',$request->email)->first();
+            if(isset($request->username)){
+                $user = User::where('username',$request->username)->first();
+            }else{
+                $user =  User::where('email',$request->email)->first();
+            }
+
             if($user == null){
                 $user = new User();
             }
@@ -285,6 +328,8 @@ class MemberController extends Controller
         }
         $user->name             = $request->name;
         $user->email            = $request->email;
+        $user->username         = isset($request->username) ? $request->username : "";
+        $user->password         = isset($request->password) ? Hash::make($request->password) : "";
         $user->phone            = $request->phone;
         $user->nik              = $request->nik;
         $user->no_member        = mt_rand(111111,999999);
@@ -619,18 +664,48 @@ class MemberController extends Controller
                 'id'    => $tmp->no_member,
             ];
             $es = $this->repository->delete($params);
-            echo json_encode($result = array([
+            return response()->json($result = array([
                 "message"   => "Data berhasil dihapus",
                 "type"      => "success",
-                "code"    => true]));
-                
+                "code"    => true]),200);
+
         }else{
-            echo json_encode($result = array([
+            return response()->json($result = array([
                 "message"   => "Data gagal dihapus",
                 "type"      => "error",
-                "code"    => false]));
+                "code"    => false]),200);
         }
 
-        
+
+    }
+
+    public function register(Request $request){
+        $validator = Validator::make($request->all(),[
+            'email'     =>  'required|email|unique:members,email',
+            'username'  =>  'required|unique:members,username',
+            'password'  =>  'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json(['error' => array("message" => $validator->errors(), "code" => 401)],401);
+        }
+
+        $user = new User();
+        $user->name = $request->username;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $result = $user->save();
+
+        if($result){
+            return response()->json(array([
+                "message"   => "User : $request->username succesfully created",
+                "data"      =>  $user,
+                "code"    => 200]),200);
+        }else{
+            return response()->json(array([
+                "message"   => "User : $request->username failed to create",
+                "code"    => 500]),500);
+        }
     }
 }

@@ -18,7 +18,7 @@ class ComplimentaryController extends Controller
             foreach($tmp_province as $row){
                 $result[] = ['id'   => $row->id, 'text'   =>  $row->name];
             }
-            echo json_encode($result);
+            return response()->json($result,200);
         }else{
             return response($tmp_province, 200);
         }
@@ -31,7 +31,7 @@ class ComplimentaryController extends Controller
             foreach($tmp_district as $row){
                 $result[] = ['id'   => $row->id, 'text'   =>  $row->name];
             }
-            echo json_encode($result);
+            return response()->json($result,200);
         }else{
             return response($tmp_district, 200);
         }
@@ -44,7 +44,7 @@ class ComplimentaryController extends Controller
             foreach($tmp_sub_district as $row){
                 $result[] = ['id'   => $row->id, 'text'   =>  $row->name];
             }
-            echo json_encode($result);
+            return response()->json($result,200);
         }else{
             return response($tmp_sub_district, 200);
         }
@@ -57,7 +57,7 @@ class ComplimentaryController extends Controller
             foreach($tmp_vilalges as $row){
                 $result[] = ['id'   => $row->id, 'text'   =>  $row->name];
             }
-            echo json_encode($result);
+            return response()->json($result,200);
         }else{
             return response($tmp_vilalges, 200);
         }
@@ -68,7 +68,7 @@ class ComplimentaryController extends Controller
         $data['count_unverified_user']  = User::where('status','0')->count();
         $data['count_verified_user']    = User::where('status','1')->count();
         $data['count_blocked_user']     = User::where('status','2')->count();
-        echo json_encode($data);
+        return response()->json($data,200);
     }
 
 
