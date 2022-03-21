@@ -59,6 +59,26 @@
                             <li> <a href="{{route('home')}}" class="nav-link active"><i class="fas fa-home"></i><span>Dashboard</span></a> </li>
                             <li class="menu-header">Manage </li>
                             <li><a class="nav-link" href="{{route('members.index')}}"><i class="far fa-user"></i> <span>Members</span></a></li>
+                            <li class="menu-header">Manage Category</li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link has-dropdown"><i class="fas fa-cog"></i> <span>Manage Category</span></a>
+                                <ul class="dropdown-menu">
+                                  <li><a class="nav-link" href="{{route('category-events.index')}}">Category Events</a></li>
+                                  <li><a class="nav-link" href="{{route('category-news.index')}}">Category News</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-header">Manage News</li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link has-dropdown"><i class="fas fa-newspaper"> </i><span>News</span></a>
+                                <ul class="dropdown-menu">
+                                  <li><a class="nav-link" href="bootstrap-alert.html">Draft</a></li>
+                                  <li><a class="nav-link" href="bootstrap-badge.html">Published</a></li>
+                                  <li><a class="nav-link" href="bootstrap-badge.html">Deleted</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-header">Manage Event</li>
+                            <li><a class="nav-link" href="{{route('members.index')}}"><i class="far fa-calendar-alt"></i> <span>Events</span></a></li>
+                            
                         </ul>
                     </aside>
                 </div>

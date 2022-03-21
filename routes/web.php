@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryEventController;
+use App\Http\Controllers\CategoryNewsController;
 use App\Http\Controllers\ComplimentaryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
@@ -43,6 +45,26 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/getSubDistrict',[ComplimentaryController::class,'getSubDistrict'])->name('getSubDistrict');
         Route::get('/getVillage',[ComplimentaryController::class,'getVillage'])->name('getVillage');
         Route::get('/getDashoardData',[ComplimentaryController::class,'getCountDashboard'])->name('getDashoardData');
+    });
+
+    Route::prefix('/category-news')->name('category-news.')->group(function () {
+        Route::get('/',[CategoryNewsController::class,'index'])->name('index');
+        Route::post('/store',[CategoryNewsController::class,'store'])->name('store');
+        Route::put('/update',[CategoryNewsController::class,'update'])->name('update');
+        Route::get('/datatables',[CategoryNewsController::class,'datatables'])->name('datatables');
+        Route::get('/detail/{id}',[CategoryNewsController::class, 'detail'])->name('detail');
+        Route::delete('/delete',[CategoryNewsController::class,'delete'])->name('delete');
+        Route::get('/search/{slug}',[CategoryNewsController::class,'search'])->name('search');
+    });
+
+    Route::prefix('/category-events')->name('category-events.')->group(function () {
+        Route::get('/',[CategoryEventController::class,'index'])->name('index');
+        Route::post('/store',[CategoryEventController::class,'store'])->name('store');
+        Route::put('/update',[CategoryEventController::class,'update'])->name('update');
+        Route::get('/datatables',[CategoryEventController::class,'datatables'])->name('datatables');
+        Route::get('/detail/{id}',[CategoryEventController::class, 'detail'])->name('detail');
+        Route::delete('/delete',[CategoryEventController::class,'delete'])->name('delete');
+        Route::get('/search/{slug}',[CategoryEventController::class,'search'])->name('search');
     });
 });
 
