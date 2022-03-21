@@ -249,7 +249,7 @@ class MemberController extends Controller
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
                         'code'          => 200,
-                        'no_member'     => $tmp_user->no_member
+                        'no_member'     => $tmp_user->email
                     ];
                     return response($response, 200);
                 }else{
