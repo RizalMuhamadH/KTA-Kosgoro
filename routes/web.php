@@ -3,8 +3,10 @@
 use App\Http\Controllers\CategoryEventController;
 use App\Http\Controllers\CategoryNewsController;
 use App\Http\Controllers\ComplimentaryController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PWAController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -65,6 +67,32 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/detail/{id}',[CategoryEventController::class, 'detail'])->name('detail');
         Route::delete('/delete',[CategoryEventController::class,'delete'])->name('delete');
         Route::get('/search/{slug}',[CategoryEventController::class,'search'])->name('search');
+    });
+
+    Route::prefix('/news')->name('news.')->group(function () {
+        Route::get('/index/{type}',[NewsController::class,'index'])->name('index');
+        Route::get('/create-update/{type}',[NewsController::class,'createUpdate'])->name('create-update');
+        Route::post('/store',[NewsController::class,'store'])->name('store');
+        Route::put('/update',[NewsController::class,'update'])->name('update');
+        Route::get('/datatables',[NewsController::class,'datatables'])->name('datatables');
+        Route::get('/detail/{id}',[NewsController::class, 'detail'])->name('detail');
+        Route::get('/read/{category}/{id}/{slug}',[NewsController::class, 'read'])->name('read');
+        Route::delete('/delete',[NewsController::class,'delete'])->name('delete');
+        Route::put('/recover',[NewsController::class,'recover'])->name('recover');
+        Route::get('/search/{slug}',[NewsController::class,'search'])->name('search');
+    });
+
+    Route::prefix('/events')->name('events.')->group(function () {
+        Route::get('/index',[EventController::class,'index'])->name('index');
+        Route::get('/create',[EventController::class,'create'])->name('create');
+        Route::post('/store',[EventController::class,'store'])->name('store');
+        Route::put('/update',[EventController::class,'update'])->name('update');
+        Route::get('/datatables',[EventController::class,'datatables'])->name('datatables');
+        Route::get('/detail/{id}',[EventController::class, 'detail'])->name('detail');
+        Route::get('/read/{category}/{id}/{slug}',[EventController::class, 'read'])->name('read');
+        Route::delete('/delete',[EventController::class,'delete'])->name('delete');
+        Route::put('/recover',[EventController::class,'recover'])->name('recover');
+        Route::get('/search/{slug}',[EventController::class,'search'])->name('search');
     });
 });
 

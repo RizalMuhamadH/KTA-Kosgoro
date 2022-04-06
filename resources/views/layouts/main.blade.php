@@ -12,7 +12,9 @@
         <!-- Template CSS -->
         <link rel="stylesheet" href="{{asset('assets/stisla/css/style.css')}}">
         <link rel="stylesheet" href="{{asset('assets/stisla/css/components.css')}}">
-        <link rel="stylesheet" href="{{asset('assets/datatables/datatables.min.css')}}">
+        {{-- <link rel="stylesheet" href="{{asset('assets/datatables/datatables.min.css')}}"> --}}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/r-2.2.9/sc-2.0.5/datatables.min.css"/>
+        <link rel="stylesheet" href="{{asset('assets/summernote/summernote.min.css')}}">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css">
     </head>
@@ -71,13 +73,13 @@
                             <li class="dropdown">
                                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-newspaper"> </i><span>News</span></a>
                                 <ul class="dropdown-menu">
-                                  <li><a class="nav-link" href="bootstrap-alert.html">Draft</a></li>
-                                  <li><a class="nav-link" href="bootstrap-badge.html">Published</a></li>
-                                  <li><a class="nav-link" href="bootstrap-badge.html">Deleted</a></li>
+                                  <li><a class="nav-link" href="{{route('news.index',['type' => 1])}}">Draft</a></li>
+                                  <li><a class="nav-link" href="{{route('news.index',['type' => 2])}}">Published</a></li>
+                                  <li><a class="nav-link" href="{{route('news.index',['type' => 3])}}">Deleted</a></li>
                                 </ul>
                             </li>
                             <li class="menu-header">Manage Event</li>
-                            <li><a class="nav-link" href="{{route('members.index')}}"><i class="far fa-calendar-alt"></i> <span>Events</span></a></li>
+                            <li><a class="nav-link" href="{{route('events.index')}}"><i class="far fa-calendar-alt"></i> <span>Events</span></a></li>
                             
                         </ul>
                     </aside>
@@ -221,8 +223,14 @@
         <script src="{{asset('assets/bootstrap/bootstrap.min.js')}}"></script>
         <script src="{{asset('assets/nicescroll/jquery.nicescroll.min.js')}}"></script>
         <script src="{{asset('assets/moment/moment.min.js')}}"></script>
-        <script src="{{asset('assets/datatables/datatables.min.js')}}"> </script>
+        {{-- <script src="{{asset('assets/datatables/datatables.min.js')}}"> </script> --}}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/b-2.2.2/b-colvis-2.2.2/b-html5-2.2.2/r-2.2.9/sc-2.0.5/datatables.min.js"></script>
+
         <script src="{{asset('assets/stisla/js/stisla.js')}}"></script>
+        <script src="{{asset('assets/jquery/jquery.uploadPreview.min.js')}}"></script>
+        <script src="{{asset('assets/summernote/summernote.min.js')}}"> </script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         <!-- Template JS File -->
