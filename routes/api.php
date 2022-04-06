@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\ComplimentaryController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\NewsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,3 +35,9 @@ Route::get('/province',[ComplimentaryController::class,'getProvince']);
 Route::get('/district',[ComplimentaryController::class,'getDistrict']);
 Route::get('/subDistrict',[ComplimentaryController::class,'getSubDistrict']);
 Route::get('/getVillage',[ComplimentaryController::class,'getVillage']);
+Route::post('/news',[NewsController::class,'getNews']);
+Route::post('/getNewsByCategory',[NewsController::class,'getNewsByCategory']);
+Route::post('/readNews',[NewsController::class,'readNews']);
+Route::post('/event',[EventController::class,'getEvent']);
+Route::post('/getEventByCategory',[EventController::class,'getEventByCategory']);
+Route::post('/readEvent',[EventController::class,'readEvent']);

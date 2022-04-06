@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CategoryNews;
 use App\Models\News;
 use App\Models\Position;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -92,7 +93,9 @@ class NewsController extends Controller
         if($request->category != "All"){
             $tmp_query->where('category_id',$request->category);
         }
-        $result['data'] = $tmp_query->where('status',$status)->with(['Category','Author'])->get();
+        $result['data'] = $tmp_query->where('status',$status)->with(['Category','Author' => function($query){
+            return $query->select('id','name');
+        }])->get();
         return response()->json($result,200);
     }
 
@@ -189,7 +192,9 @@ class NewsController extends Controller
     }
 
     public function read($category, $id, $slug){
-        $data = News::where('id', $id)->where('category_id',$category)->where('slug',$slug)->with(['Category','Author'])->first();
+        $data = News::where('id', $id)->where('category_id',$category)->where('slug',$slug)->with(['Category','Author' => function($query){
+            return $query->select('id','name');
+        }])->first();
         if($data){
             $response = [
                 'code'          => 200,
@@ -239,7 +244,100 @@ class NewsController extends Controller
                 "type"      => "error",
                 "code"    => false]),200);
         }
+    }
 
+    public function getNews(Request $request){
+        $user = User::where('token',$request->token)->first();
+        if($user){
+            $news = News::with(['Category','Author' => function($query){
+                return $query->select('id','name');
+            }])->get();
+            if($news != null){
+                $response = [
+                    'code'      =>  200,
+                    'data'      =>  $news,
+                    'message'   =>  "Data Ditemukan"
+                ];
+                return response($response, 200);
+            }else{
+                $response = [
+                    'code'      =>  500,
+                    'data'      =>  null,
+                    'message'   =>  "Data Tidak Ditemukan"
+                ];
+                return response($response, 200);
+            }
+        }else{
+            $response = [
+                'code'      =>  403,
+                'data'      =>  null,
+                'message'   =>  "Silahkan Login Terlebih Dahulu!"
+            ];
+            return response($response, 403);
+        }
+    }
 
+    public function getNewsByCategory(Request $request){
+        $user = User::where('token',$request->token)->first();
+        if($user){
+            $category = CategoryNews::where('slug',$request->category)->first();
+            $news = News::where('category_id',$category->id)->with(['Category','Author' => function($query){
+                return $query->select('id','name');
+            }])->get();
+            if($news != null){
+                $response = [
+                    'code'      =>  200,
+                    'data'      =>  $news,
+                    'message'   =>  "Data Ditemukan"
+                ];
+                return response($response, 200);
+            }else{
+                $response = [
+                    'code'      =>  500,
+                    'data'      =>  null,
+                    'message'   =>  "Data Tidak Ditemukan"
+                ];
+                return response($response, 200);
+            }
+        }else{
+            $response = [
+                'code'      =>  403,
+                'data'      =>  null,
+                'message'   =>  "Silahkan Login Terlebih Dahulu!"
+            ];
+            return response($response, 403);
+        }
+    }
+
+    public function readNews(Request $request){
+        $user = User::where('token',$request->token)->first();
+        if($user){
+            $category = CategoryNews::where('slug',$request->category)->first();
+            $data = News::where('id', $request->id)->where('category_id',$category->id)->where('slug',$request->slug)->with(['Category','Author' => function($query){
+                return $query->select('id','name');
+            }])->first();
+            if($data != null){
+                $response = [
+                    'code'      =>  200,
+                    'data'      =>  $data,
+                    'message'   =>  "Data Ditemukan"
+                ];
+                return response($response, 200);
+            }else{
+                $response = [
+                    'code'      =>  500,
+                    'data'      =>  null,
+                    'message'   =>  "Data Tidak Ditemukan"
+                ];
+                return response($response, 200);
+            }
+        }else{
+            $response = [
+                'code'      =>  403,
+                'data'      =>  null,
+                'message'   =>  "Silahkan Login Terlebih Dahulu!"
+            ];
+            return response($response, 403);
+        }
     }
 }

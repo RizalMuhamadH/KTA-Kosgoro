@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\CategoryEvent;
 use App\Models\Events;
 use App\Models\Position;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+
 
 
 class EventController extends Controller
@@ -209,7 +211,94 @@ class EventController extends Controller
                 "type"      => "error",
                 "code"    => false]),200);
         }
+    }
 
+    public function getEvent(Request $request){
+        $user = User::where('token',$request->token)->first();
+        if($user){
+            $event = Events::with(['Category'])->get();
+            if($event != null){
+                $response = [
+                    'code'      =>  200,
+                    'data'      =>  $event,
+                    'message'   =>  "Data Ditemukan"
+                ];
+                return response($response, 200);
+            }else{
+                $response = [
+                    'code'      =>  500,
+                    'data'      =>  null,
+                    'message'   =>  "Data Tidak Ditemukan"
+                ];
+                return response($response, 200);
+            }
+        }else{
+            $response = [
+                'code'      =>  403,
+                'data'      =>  null,
+                'message'   =>  "Silahkan Login Terlebih Dahulu!"
+            ];
+            return response($response, 403);
+        }
+    }
 
+    public function getEventByCategory(Request $request){
+        $user = User::where('token',$request->token)->first();
+        if($user){
+            $category = CategoryEvent::where('slug',$request->category)->first();
+            $event = Events::where('category_id',$category->id)->with(['Category'])->get();
+            if($event != null){
+                $response = [
+                    'code'      =>  200,
+                    'data'      =>  $event,
+                    'message'   =>  "Data Ditemukan"
+                ];
+                return response($response, 200);
+            }else{
+                $response = [
+                    'code'      =>  500,
+                    'data'      =>  null,
+                    'message'   =>  "Data Tidak Ditemukan"
+                ];
+                return response($response, 200);
+            }
+        }else{
+            $response = [
+                'code'      =>  403,
+                'data'      =>  null,
+                'message'   =>  "Silahkan Login Terlebih Dahulu!"
+            ];
+            return response($response, 403);
+        }
+    }
+
+    public function readEvent(Request $request){
+        $user = User::where('token',$request->token)->first();
+        if($user){
+            $category = CategoryEvent::where('slug',$request->category)->first();
+            $data = Events::where('id', $request->id)->where('category_id',$category->id)->where('slug',$request->slug)->with(['Category'])->first();
+            if($data != null){
+                $response = [
+                    'code'      =>  200,
+                    'data'      =>  $data,
+                    'message'   =>  "Data Ditemukan"
+                ];
+                return response($response, 200);
+            }else{
+                $response = [
+                    'code'      =>  500,
+                    'data'      =>  null,
+                    'message'   =>  "Data Tidak Ditemukan"
+                ];
+                return response($response, 200);
+            }
+        }else{
+            $response = [
+                'code'      =>  403,
+                'data'      =>  null,
+                'message'   =>  "Silahkan Login Terlebih Dahulu!"
+            ];
+            return response($response, 403);
+        }
     }
 }
