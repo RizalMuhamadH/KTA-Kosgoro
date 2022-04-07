@@ -19,7 +19,7 @@
         </div>
         <div class="container card-between">
             <div class="card card-round">
-                <div class="card-content">
+                <div class="card-content" style="padding-bottom: 10px; margin-top:-5vh">
                     <div class="row">
                         <div class="col s3">
                             <img src="https://app.kosgoro57.id/storage/data_member/{{$data->id}}/{{$data->photo}}" alt="" class="profile-pict"/>
@@ -41,7 +41,9 @@
                         <img class="logo-card" src="https://app.kosgoro57.id/assets/pwa/img/logo.png"><br>
                     </div>
                     <div class="col s8" style="display:block; margin-top:25px;">
-                        <span class="card-title white-text" style="line-height: 1px;">KARTU ANGGOTA KOSGORO 1957</span> 
+                        <b> <span class="white-text" style="line-height: 1.2">KARTU ANGGOTA</span> <br> </b>
+                        <b> <span class="card-title white-text">KOSGORO 1957</span> </b>
+                        
                     </div>
                 </div>
                 <div class="card-content " style="background-image:url('{{asset('assets/pwa/img/kosgoro-back.png')}}'); background-size:cover; background-position:center; background-repeat:no-repeat;">
@@ -75,10 +77,10 @@
                                 
                             </div>
                         </div>
-                        <div class="col s6 offset-s3" style="margin-top: -10%; margin-bottom:0px">
-                            <span style="display: block;margin-left: 15%;margin-right: auto; font-size:11px"> Ketua Umum </span>
-                            <img src="{{asset('assets/pwa/img/ttd-kosgoro.png')}}" alt="" style="max-width: 50%;display: block;margin-left: auto;margin-right: auto; "/>
-                            <span style="display: block;margin-left: auto;margin-right: auto; font-size:12px"> <b>  Dave AF Laksono  </b> </span>
+                        <div class="col s6 offset-s3" style="margin-top: -5%; margin-bottom:0px">
+                            <span style="display: block;margin-left: 35%;margin-right: auto; font-size:11px"> Ketua Umum </span>
+                            <img src="{{asset('assets/pwa/img/ttd-kosgoro.png')}}" alt="" style="max-width: 40%;display: block;margin-left: auto;margin-right: auto; "/>
+                            <span style="display: block;margin-left: 35%;margin-right: auto; font-size:12px"> <b>  Dave AF Laksono  </b> </span>
                         </div>
                         <div class="col s3">
                             <img src="https://app.kosgoro57.id/storage/data_member/{{$data->id}}/{{$data->qrcode}}" class="img-left" alt=""   onerror="this.src='https://app.kasgoro57.id/assets/pwa/img/qrcode-default.png'"/>

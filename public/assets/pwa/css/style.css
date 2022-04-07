@@ -14,7 +14,7 @@
 
 .profile-name{
     color: #E4831A;
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .kosgoro-bg{
@@ -108,7 +108,7 @@ input{
 .logo-profile{
     z-index: 3;
     position: absolute;
-    top: 15%;
+    top: 10%;
     left: 35%;
     width: 30%;
     height: auto;
@@ -139,7 +139,7 @@ input{
     margin-right: auto;
     margin-bottom: auto;
     display: block;
-    width: 100%;
+    width: 70%;
     height: auto;
 }
 
@@ -188,12 +188,13 @@ figure figcaption {
 }
 
 .profile-pict{
-    margin-top: -8vh;
-    max-width: 15vw;
+    margin-top: -5vh;
+    max-width: 20vw;
     max-height: 20vh;
     margin-right: auto;
     margin-left: auto;
     display: block;
+    border-radius: 10%;
 }
 
 .profile-card{
@@ -204,6 +205,7 @@ figure figcaption {
     display: block;
     width: 100%;
     height: auto;
+    
 }
 
 @media screen and (min-width:641px) {
@@ -211,8 +213,8 @@ figure figcaption {
         z-index: 3;
         position: absolute;
         top: 10%;
-        left: 45%;
-        width: 10%;
+        left: 35%;
+        width: 30%;
         height: auto;
         /* overflow-x: hidden; */
 
@@ -257,12 +259,74 @@ figure figcaption {
     }
 
     .profile-pict{
-        margin-top: -20vh;
+        margin-top: -5vh;
         max-width: 15vw;
         max-height: 30vh;
         margin-right: auto;
         margin-left: auto;
         display: block;
+        border-radius: 10%;
+    }
+}
+
+@media screen and (max-width:320px) {
+    .logo-profile{
+        z-index: 3;
+        position: absolute;
+        top: 10%;
+        left: 30%;
+        width: 35%;
+        height: auto;
+        /* overflow-x: hidden; */
+
+    }
+
+    .top{
+        height: 50vh;
+        width: 100%;
+    }
+
+    .back{
+        position:absolute;
+        z-index: 1;
+        width: 100%;
+        height: 50vh;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    .front{
+        z-index: 2;
+        position: relative;
+        width: auto;
+        height: 40vh;
+    }
+
+    .card-between{
+        z-index: 5;
+        position: relative;
+        margin-top: -8%;
+        margin-bottom: 5%;
+
+    }
+
+
+    .card-kta{
+        position: relative;
+        /* background-image: url('/public/assets/pwa/img/kta-background.png'); */
+        background-size: cover;
+        background-position: center;
+        height: auto;
+    }
+
+    .profile-pict{
+        margin-top: -5vh;
+        max-width: 20vw;
+        max-height: 30vh;
+        margin-right: auto;
+        margin-left: auto;
+        display: block;
+        border-radius: 10%;
     }
 }
 
@@ -283,12 +347,81 @@ figure figcaption {
     }
 
     .profile-pict{
-        margin-top: -8vh;
-        max-width: 15vw;
+        margin-top: -5vh;
+        max-width: 10vw;
         max-height: 20vh;
         margin-right: auto;
         margin-left: auto;
         display: block;
+        border: 2px;
+        border-radius: 10%;
+    }
+
+    .top{
+        height: 50vh;
+        width: 100%;
+    }
+
+    .back{
+        position:absolute;
+        z-index: 1;
+        width: 100%;
+        height: 50vh;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    .front{
+        z-index: 2;
+        position: relative;
+        width: auto;
+        height: 40vh;
+    }
+
+    .card-between{
+        z-index: 5;
+        position: relative;
+        margin-top: -3%;
+        margin-bottom: 5%;
+
+    }
+
+
+
+    .card-kta{
+        position: relative;
+        /* background-image: url('/public/assets/pwa/img/kta-background.png'); */
+        background-size: cover;
+        background-position: center;
+        height: auto;
+    }
+}
+
+@media screen and (min-width:961px) {
+    .logo-profile{
+        z-index: 3;
+        position: absolute;
+        top: 10%;
+        left: 45%;
+        width: 15vh;
+        height: auto;
+        /* overflow-x: hidden; */
+
+    }
+
+    .menu{
+        font-size: 20px;
+    }
+
+    .profile-pict{
+        margin-top: -5vh;
+        max-width: 10vw;
+        max-height: 20vh;
+        margin-right: auto;
+        margin-left: auto;
+        display: block;
+        border: 2px;
+        border-radius: 10%;
     }
 
     .top{

@@ -36,7 +36,7 @@
     </script>
     <title>{{config('app.name')}}</title>
 </head>
-<body>
+<body style="margin-left:auto; margin-right:auto;">
     @yield('body')
     @stack('page-javascript')
 </body>
