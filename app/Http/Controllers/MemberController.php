@@ -243,8 +243,9 @@ class MemberController extends Controller
                     return response($response, 200);
                 }
             }elseif($request->username != null){
-                if(Auth::attempt(['username' => $request->username, 'password' => $request->password, 'active' => 1])){
-                    $tmp_user = User::where('username',$request->username)->first();
+                $tmp_user = User::where(['username' => $request->username, 'active' => 1])->first();
+                if(Hash::check($request->password,$tmp_user->password)){
+                    Auth::login($tmp_user);
                     $response = [
                         'token'         => $tmp_user->token,
                         'status'        => $tmp_user->status,
