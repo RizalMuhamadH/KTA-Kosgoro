@@ -20,17 +20,15 @@ class AuthPWA
         if(Auth::user() == null){
             return redirect()->route('pwa.index');
         }else{
-            if(isset($request->email)){
-                if(Auth::user()->email != $request->email){
-                    return redirect()->route('pwa.index')->with('message','Silahkan Login Terlebih Dahulu');
-                }
-            }else if(isset($request->id)){
-                if(Auth::user()->id != $request->id){
-                    return redirect()->route('pwa.index')->with('message','Silahkan Login Terlebih Dahulu');
-                }
-            }else{
-                return redirect()->route('pwa.profile',['email' => Auth::user()->email]);
-            }
+            // if(isset($request->email)){
+            //     if(Auth::user()->email != $request->email){
+            //         return redirect()->route('pwa.index')->with('message','Silahkan Login Terlebih Dahulu');
+            //     }
+            // }else if(isset($request->id)){
+            //     if(Auth::user()->id != $request->id){
+            //         return redirect()->route('pwa.index')->with('message','Silahkan Login Terlebih Dahulu');
+            //     }
+            // }
         }
         return $next($request);
     }

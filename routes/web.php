@@ -105,6 +105,10 @@ Route::prefix('pwa')->name('pwa.')->group(function () {
         Route::get('/update/{id}',[PWAController::class,'update'])->name('update');
         Route::put('/store_update',[PWAController::class,'store_update'])->name('store_update');
         Route::get('/download_kta/{id}',[PWAController::class,'download_kta'])->name('download_kta');
+        Route::get('/news',[PWAController::class,'news'])->name('news');
+        Route::get('/events',[PWAController::class,'events'])->name('events');
+        Route::get('/read_event/{category}/{id}/{slug}',[PWAController::class, 'read_event'])->name('read_event');
+        Route::get('/read_news/{category}/{id}/{slug}',[PWAController::class, 'read_news'])->name('read_news');
     });
     Route::post('/logout',[PWAController::class,'logout'])->name('logout');
 });

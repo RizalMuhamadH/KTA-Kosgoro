@@ -1,3 +1,19 @@
+
+.nav-wrapper{
+    background-color: #E4831A;
+}
+
+.img-article{
+    display: block;
+    border-radius: 2px 2px 0 0;
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
 .img-center {
     display: block;
     margin-bottom: auto;
@@ -7,6 +23,31 @@
     max-width: 100%;
     height: auto;
 }
+
+.dashboard-menu i{
+    margin: 20px 0px;
+    padding-top: 20px;
+    color: #E4831A;
+    font-size: 3rem;
+    display: block;
+}
+
+.menu-caption{
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: -20px;
+    padding-bottom: 20px;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
 
 .kosgoro-text{
     color: #E4831A;
@@ -47,9 +88,6 @@
     margin-top: 20px;
 }
 
-body {
-    font-family: 'Roboto';
-}
 
 .bottom{
     position: relative;
