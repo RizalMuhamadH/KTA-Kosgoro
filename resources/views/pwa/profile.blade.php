@@ -90,52 +90,25 @@
                 </div>
             </div>
         </div>
+        
         {{-- <div class="center container">
             <a class="btn-small btn-register btn-large kosgoro-bg btn-print" href="{{route('pwa.download_kta',['id' => $data->id])}}">
                 Cetak Kartu Anggota
             </a>
         </div> --}}
+        <div class="container">
+            <a class="btn-small btn-large kosgoro-bg" style="display: block" href="{{route('pwa.update',['id'    => $data->id])}}">
+                Update Profile
+            </a>
+        </div>
     </main>
     <footer class="page-footer">
-        <div class="container">
-            <div class="row d-flex">
-                <div class="col s3 center">  
-                    <a class="grey-text menu" href="{{route('pwa.index')}}">
-                        <i class="material-icons sidenav-trigger">home</i></a>
-                    </a>
-                </div>
-                <div class="col s2 center">
-                    <a class="active menu" href="{{route('pwa.update',['id'    => $data->id])}}">
-                        <i class="material-icons sidenav-trigger">assignment_ind</i></a>
-                    </a>
-                </div>
-                <div class="col s2 center">
-                    <a class="grey-text menu" href="{{route('pwa.update',['id'    => $data->id])}}">
-                        <i class="material-icons sidenav-trigger">newspaper</i></a>
-                    </a>
-                </div>
-                <div class="col s2 center">
-                    <a class="grey-text menu" href="{{route('pwa.update',['id'    => $data->id])}}">
-                        <i class="material-icons sidenav-trigger">event</i></a>
-                    </a>
-                </div>
-                
-                <div class="col s3 center">
-                    <span class="grey-text menu" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="material-icons sidenav-trigger">exit_to_app</i></a>
-                        <form id="logout-form" action="{{ route('pwa.logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </span>
-                </div>
-            </div>
-        </div>
-        {{-- <div class="footer-copyright">
+        <div class="footer-copyright">
           <div class="container">
-            © 2014 Copyright Text
+            © {{date('Y')}}
           </div>
-        </div> --}}
-      </footer>
+        </div>
+    </footer>
 @endsection
 
 @push('page-javascript')

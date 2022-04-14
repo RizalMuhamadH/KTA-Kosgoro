@@ -102,5 +102,12 @@
             </div> --}}
         </div>
     </main>
+    <footer class="page-footer">
+        <div class="footer-copyright">
+            <div class="container">
+              © {{date('Y')}}
+            </div>
+        </div>
+    </footer>
     
 @endsection

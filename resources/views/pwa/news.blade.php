@@ -43,5 +43,10 @@
     </main>
     <footer class="main-footer">
         {{$news->links('vendor.pagination.simple-default')}}
+        <div class="footer-copyright">
+            <div class="container">
+              © {{date('Y')}}
+            </div>
+          </div>
     </footer>
 @endsection
