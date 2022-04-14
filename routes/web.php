@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', [App\Http\Controllers\PWAController::class, 'index']);
+Route::get('/contact', [App\Http\Controllers\PWAController::class, 'contact']);
 Route::get('/admin',[HomeController::class,'index'])->name('admin_home')->middleware(['admin']);
 Route::post('/member/login',[MemberController::class,'login'])->name('member_login');
 Route::post('/generate_otp',[MemberController::class,'generate_otp'])->name('generate_otp');
@@ -111,6 +112,7 @@ Route::prefix('pwa')->name('pwa.')->group(function () {
         Route::get('/read_news/{category}/{id}/{slug}',[PWAController::class, 'read_news'])->name('read_news');
     });
     Route::post('/logout',[PWAController::class,'logout'])->name('logout');
+    Route::get('/contact',[PWAController::class,'contact'])->name('contact');
 });
 
 

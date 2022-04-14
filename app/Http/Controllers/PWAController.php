@@ -107,4 +107,8 @@ class PWAController extends Controller
         ]);
     }
 
+    public function contact(){
+        return view('pwa.contact');
+    }
+
 }

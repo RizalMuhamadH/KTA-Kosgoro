@@ -18,11 +18,11 @@
             <article>{!! $event->body !!}}</article>
         </div>
     </main>
-    {{-- <footer class="page-footer">
+    <footer class="page-footer">
         <div class="footer-copyright">
-            <div class="container">
-              © {{date('Y')}}
+            <div class="container black-text">
+                © {{date('Y')}} - Kosgoro
             </div>
         </div>
-    </footer> --}}
+    </footer>
 @endsection
