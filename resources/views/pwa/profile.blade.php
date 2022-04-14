@@ -102,13 +102,13 @@
             </a>
         </div>
     </main>
-    <footer class="page-footer">
+    {{-- <footer class="page-footer">
         <div class="footer-copyright">
           <div class="container">
             © {{date('Y')}}
           </div>
         </div>
-    </footer>
+    </footer> --}}
 @endsection
 
 @push('page-javascript')

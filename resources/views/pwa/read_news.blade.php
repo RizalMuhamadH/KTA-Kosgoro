@@ -18,11 +18,11 @@
             <article>{!! $news->body !!}</article>
         </div>
     </main>
-    <footer class="page-footer">
+    {{-- <footer class="page-footer">
         <div class="footer-copyright">
             <div class="container black-text">
                 © {{date('Y')}} Copyright 
             </div>
         </div>
-    </footer>
+    </footer> --}}
 @endsection
