@@ -14,31 +14,34 @@ use PDO;
 
 class NewsController extends Controller
 {
-    public function index($type){
-        return view('news.index',[
+    public function index($type)
+    {
+        return view('news.index', [
             'categories'    =>  CategoryNews::all(),
             'type'          =>  $type,
             'positions'     =>  Position::all()
         ]);
     }
 
-    public function createUpdate($type){
-        return view('news.create',[
+    public function createUpdate($type)
+    {
+        return view('news.create', [
             'categories'    =>  CategoryNews::all(),
             'positions'     =>  Position::all()
-        ]); 
+        ]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $status = "";
-        if($request->status == "1"){
+        if ($request->status == "1") {
             $status = "Draft";
-        }elseif($request->status == "2"){
+        } elseif ($request->status == "2") {
             $status = "Published";
-        }elseif($request->status == "3"){
+        } elseif ($request->status == "3") {
             $status = "Deleted";
         }
-       
+
         $filename = "";
         $request->validate([
             'title'         =>  'required|min:10|max:40',
@@ -49,14 +52,14 @@ class NewsController extends Controller
             'featured'      =>  'required',
             'category'      =>  'required',
             'status'        =>  'required',
-            'thumbnail'     =>  'required|mimes:jpg,png,jpeg'          
+            'thumbnail'     =>  'required|mimes:jpg,png,jpeg'
         ]);
 
-        if($request->hasFile('thumbnail')){
+        if ($request->hasFile('thumbnail')) {
             $filename = Str::slug($request->title);
-            $filename = $filename.".".$request->file('thumbnail')->getClientOriginalExtension();
+            $filename = $filename . "." . $request->file('thumbnail')->getClientOriginalExtension();
         }
-       
+
         $article =  new News();
         $article->title                     = $request->title;
         $article->description               = $request->description;
@@ -66,50 +69,52 @@ class NewsController extends Controller
         $article->featured                  = $request->featured;
         $article->category_id               = $request->category;
         $article->user_id                   = Auth::user()->id;
-        $article->status                    = $status;  
+        $article->status                    = $status;
         $article->meta_description          = $request->description;
         $article->thumbnail                 = $filename;
         $result = $article->save();
 
-        if($result){
-            $request->file('thumbnail')->storeAs("article/".$article->id."/",$filename,'public');
-            return Redirect::route('news.index',['type' => $request->status])->with(['message' => "Article Succesfully Created"]);
-        }else{
+        if ($result) {
+            $request->file('thumbnail')->storeAs("article/" . $article->id . "/", $filename, 'public');
+            return Redirect::route('news.index', ['type' => $request->status])->with(['message' => "Article Succesfully Created"]);
+        } else {
             return Redirect::back()->with(['message' => "Article Failed Created"]);
-        }   
+        }
     }
 
-    public function datatables(Request $request){
+    public function datatables(Request $request)
+    {
         $status = "";
-        if($request->status == "1"){
+        if ($request->status == "1") {
             $status = "Draft";
-        }elseif($request->status == "2"){
+        } elseif ($request->status == "2") {
             $status = "Published";
-        }elseif($request->status == "3"){
+        } elseif ($request->status == "3") {
             $status = "Deleted";
         }
-        
-        $tmp_query = News::select(['id','slug','title','user_id','category_id','status','created_at','updated_at']);
-        if($request->category != "All"){
-            $tmp_query->where('category_id',$request->category);
+
+        $tmp_query = News::select(['id', 'slug', 'title', 'user_id', 'category_id', 'status', 'created_at', 'updated_at']);
+        if ($request->category != "All") {
+            $tmp_query->where('category_id', $request->category);
         }
-        $result['data'] = $tmp_query->where('status',$status)->with(['Category','Author' => function($query){
-            return $query->select('id','name');
+        $result['data'] = $tmp_query->where('status', $status)->with(['Category', 'Author' => function ($query) {
+            return $query->select('id', 'name');
         }])->get();
-        return response()->json($result,200);
+        return response()->json($result, 200);
     }
 
-    public function detail(Request $request, $id){
-        if($request->ajax()){
-            if($id == null){
+    public function detail(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            if ($id == null) {
                 $response = [
                     'code'          => 200,
                     'data'          => null,
                     'message'       => "Data Tidak Ditemukan"
                 ];
-            }else{
+            } else {
                 $data = News::find($id);
-                if($data){
+                if ($data) {
                     $response = [
                         'code'          => 200,
                         'data'          => $data,
@@ -118,34 +123,34 @@ class NewsController extends Controller
                 }
             }
             return response($response, 200);
-        }else{
-            if($id == null){
+        } else {
+            if ($id == null) {
                 abort(404);
-            }else{
+            } else {
                 $data = News::find($id);
-                if($data){
-                    return view('news.update',[
+                if ($data) {
+                    return view('news.update', [
                         'categories'    =>  CategoryNews::all(),
                         'positions'     =>  Position::all(),
                         'data'          =>  $data
-                    ]); 
+                    ]);
                 }
             }
         }
-
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $status = "";
         $change_thumbnail = false;
-        if($request->status == "1"){
+        if ($request->status == "1") {
             $status = "Draft";
-        }elseif($request->status == "2"){
+        } elseif ($request->status == "2") {
             $status = "Published";
-        }elseif($request->status == "3"){
+        } elseif ($request->status == "3") {
             $status = "Deleted";
         }
-       
+
         $filename = "";
         $request->validate([
             'title'         =>  'required|min:10|max:40',
@@ -155,16 +160,16 @@ class NewsController extends Controller
             'source_link'   =>  'required|url',
             'featured'      =>  'required',
             'category'      =>  'required',
-            'status'        =>  'required',         
-            'id'            =>  'required',         
+            'status'        =>  'required',
+            'id'            =>  'required',
         ]);
 
-        if($request->hasFile('thumbnail')){
+        if ($request->hasFile('thumbnail')) {
             $filename = Str::slug($request->title);
-            $filename = $filename.".".$request->file('thumbnail')->getClientOriginalExtension();
+            $filename = $filename . "." . $request->file('thumbnail')->getClientOriginalExtension();
             $change_thumbnail = true;
         }
-       
+
         $article =  News::find($request->id);
         $article->title                     = $request->title;
         $article->description               = $request->description;
@@ -174,156 +179,142 @@ class NewsController extends Controller
         $article->featured                  = $request->featured;
         $article->category_id               = $request->category;
         $article->user_id                   = Auth::user()->id;
-        $article->status                    = $status;  
+        $article->status                    = $status;
         $article->meta_description          = $request->description;
-        if($change_thumbnail){
+        if ($change_thumbnail) {
             $article->thumbnail                 = $filename;
         }
         $result = $article->save();
 
-        if($result){
-            if($change_thumbnail){
-                $request->file('thumbnail')->storeAs("article/".$request->id."/",$filename,'public');
+        if ($result) {
+            if ($change_thumbnail) {
+                $request->file('thumbnail')->storeAs("article/" . $request->id . "/", $filename, 'public');
             }
-            return Redirect::route('news.index',['type' => $request->status])->with(['message' => "Article Succesfully Updated"]);
-        }else{
+            return Redirect::route('news.index', ['type' => $request->status])->with(['message' => "Article Succesfully Updated"]);
+        } else {
             return Redirect::back()->with(['message' => "Article Failed Updated"]);
-        }   
+        }
     }
 
-    public function read($category, $id, $slug){
-        $data = News::where('id', $id)->where('category_id',$category)->where('slug',$slug)->with(['Category','Author' => function($query){
-            return $query->select('id','name');
+    public function read($category, $id, $slug)
+    {
+        $data = News::where('id', $id)->where('category_id', $category)->where('slug', $slug)->with(['Category', 'Author' => function ($query) {
+            return $query->select('id', 'name');
         }])->first();
-        if($data){
+        if ($data) {
             $response = [
                 'code'          => 200,
                 'data'          => $data,
                 'message'       => "Data Ditemukan"
             ];
-        }else{
+        } else {
             $response = [
                 'code'          => 200,
                 'data'          => null,
                 'message'       => "Data Tidak Ditemukan"
             ];
         }
-       
+
         return response($response, 200);
     }
 
-    public function delete(Request $request){ 
-        $result = News::where('id',$request->id)->update(['status' => 'Deleted']);
-        if($result){
+    public function delete(Request $request)
+    {
+        $result = News::where('id', $request->id)->update(['status' => 'Deleted']);
+        if ($result) {
             return response()->json($result = array([
                 "message"   => "Data berhasil dihapus",
                 "type"      => "success",
-                "code"    => true]),200);
-
-        }else{
+                "code"    => true
+            ]), 200);
+        } else {
             return response()->json($result = array([
                 "message"   => "Data gagal dihapus",
                 "type"      => "error",
-                "code"    => false]),200);
+                "code"    => false
+            ]), 200);
         }
-
-
     }
 
-    public function recover(Request $request){ 
-        $result = News::where('id',$request->id)->update(['status' => 'Draft']);
-        if($result){
+    public function recover(Request $request)
+    {
+        $result = News::where('id', $request->id)->update(['status' => 'Draft']);
+        if ($result) {
             return response()->json($result = array([
                 "message"   => "Data berhasil dikembalikan",
                 "type"      => "success",
-                "code"    => true]),200);
-
-        }else{
+                "code"    => true
+            ]), 200);
+        } else {
             return response()->json($result = array([
                 "message"   => "Data gagal dikembalikan",
                 "type"      => "error",
-                "code"    => false]),200);
+                "code"    => false
+            ]), 200);
         }
     }
 
-    public function getNews(Request $request){
-        $user = User::where('token',$request->token)->first();
-        if($user){
-            $news = News::with(['Category','Author' => function($query){
-                return $query->select('id','name');
-            }])->where('status', 'Published')->get();
-            if($news != null){
-                $response = [
-                    'code'      =>  200,
-                    'data'      =>  $news,
-                    'message'   =>  "Data Ditemukan"
-                ];
-                return response($response, 200);
-            }else{
-                $response = [
-                    'code'      =>  500,
-                    'data'      =>  null,
-                    'message'   =>  "Data Tidak Ditemukan"
-                ];
-                return response($response, 200);
-            }
-        }else{
+    public function getNews(Request $request)
+    {
+        $news = News::with(['Category', 'Author' => function ($query) {
+            return $query->select('id', 'name');
+        }])->where('status', 'Published')->get();
+        if ($news != null) {
             $response = [
-                'code'      =>  403,
-                'data'      =>  null,
-                'message'   =>  "Silahkan Login Terlebih Dahulu!"
+                'code'      =>  200,
+                'data'      =>  $news,
+                'message'   =>  "Data Ditemukan"
             ];
-            return response($response, 403);
-        }
-    }
-
-    public function getNewsByCategory(Request $request){
-        $user = User::where('token',$request->token)->first();
-        if($user){
-            $category = CategoryNews::where('slug',$request->category)->first();
-            $news = News::where('category_id',$category->id)->with(['Category','Author' => function($query){
-                return $query->select('id','name');
-            }])->where('status', 'Published')->get();
-            if($news != null){
-                $response = [
-                    'code'      =>  200,
-                    'data'      =>  $news,
-                    'message'   =>  "Data Ditemukan"
-                ];
-                return response($response, 200);
-            }else{
-                $response = [
-                    'code'      =>  500,
-                    'data'      =>  null,
-                    'message'   =>  "Data Tidak Ditemukan"
-                ];
-                return response($response, 200);
-            }
-        }else{
+            return response($response, 200);
+        } else {
             $response = [
-                'code'      =>  403,
+                'code'      =>  500,
                 'data'      =>  null,
-                'message'   =>  "Silahkan Login Terlebih Dahulu!"
+                'message'   =>  "Data Tidak Ditemukan"
             ];
-            return response($response, 403);
+            return response($response, 200);
         }
     }
 
-    public function readNews(Request $request){
-        $user = User::where('token',$request->token)->first();
-        if($user){
-            $category = CategoryNews::where('slug',$request->category)->first();
-            $data = News::where('id', $request->id)->where('category_id',$category->id)->where('slug',$request->slug)->with(['Category','Author' => function($query){
-                return $query->select('id','name');
+    public function getNewsByCategory(Request $request)
+    {
+        $category = CategoryNews::where('slug', $request->category)->first();
+        $news = News::where('category_id', $category->id)->with(['Category', 'Author' => function ($query) {
+            return $query->select('id', 'name');
+        }])->where('status', 'Published')->get();
+        if ($news != null) {
+            $response = [
+                'code'      =>  200,
+                'data'      =>  $news,
+                'message'   =>  "Data Ditemukan"
+            ];
+            return response($response, 200);
+        } else {
+            $response = [
+                'code'      =>  500,
+                'data'      =>  null,
+                'message'   =>  "Data Tidak Ditemukan"
+            ];
+            return response($response, 200);
+        }
+    }
+
+    public function readNews(Request $request)
+    {
+        $user = User::where('token', $request->token)->first();
+        if ($user) {
+            $category = CategoryNews::where('slug', $request->category)->first();
+            $data = News::where('id', $request->id)->where('category_id', $category->id)->where('slug', $request->slug)->with(['Category', 'Author' => function ($query) {
+                return $query->select('id', 'name');
             }])->first();
-            if($data != null){
+            if ($data != null) {
                 $response = [
                     'code'      =>  200,
                     'data'      =>  $data,
                     'message'   =>  "Data Ditemukan"
                 ];
                 return response($response, 200);
-            }else{
+            } else {
                 $response = [
                     'code'      =>  500,
                     'data'      =>  null,
@@ -331,7 +322,7 @@ class NewsController extends Controller
                 ];
                 return response($response, 200);
             }
-        }else{
+        } else {
             $response = [
                 'code'      =>  403,
                 'data'      =>  null,
