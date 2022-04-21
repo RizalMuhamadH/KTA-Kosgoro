@@ -251,7 +251,7 @@ class NewsController extends Controller
         if($user){
             $news = News::with(['Category','Author' => function($query){
                 return $query->select('id','name');
-            }])->get();
+            }])->where('status', 'Published')->get();
             if($news != null){
                 $response = [
                     'code'      =>  200,
@@ -283,7 +283,7 @@ class NewsController extends Controller
             $category = CategoryNews::where('slug',$request->category)->first();
             $news = News::where('category_id',$category->id)->with(['Category','Author' => function($query){
                 return $query->select('id','name');
-            }])->get();
+            }])->where('status', 'Published')->get();
             if($news != null){
                 $response = [
                     'code'      =>  200,
