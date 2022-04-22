@@ -18,7 +18,7 @@
                     <div class="col s4 menu_click">
                         <div class="center card card-round dashboard-menu">
                             <i class="material-icons">account_circle</i>
-                            <p class="menu-caption">Keanggotaan</p>
+                            <p class="menu-caption" style="word-wrap: break-word;">Keanggotaan</p>
                         </div>
                     </div>
                 </a>
@@ -26,7 +26,7 @@
                     <div class="col s4 ">
                         <div class="center card card-round dashboard-menu">
                             <i class="material-icons">newspaper</i>
-                            <p class="menu-caption">News</p>
+                            <p class="menu-caption" style="word-wrap: break-word;" >News</p>
                         </div>
                     </div>
                 </a>
@@ -34,7 +34,7 @@
                     <div class="col s4 ">
                         <div class="center card card-round dashboard-menu">
                             <i class="material-icons">event</i>
-                            <p class="menu-caption">Events</p>
+                            <p class="menu-caption" style="word-wrap: break-word;">Events</p>
                         </div>
                     </div>
                 </a>
@@ -48,7 +48,7 @@
                 <div class="col s4" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <div class="center card card-round dashboard-menu">
                         <i class="material-icons red-text">exit_to_app</i>
-                        <p class="menu-caption">Logout</p>
+                        <p class="menu-caption" style="word-wrap: break-word;">Logout</p>
                     </div>
                       
                     <form id="logout-form" action="{{ route('pwa.logout') }}" method="POST" class="d-none">

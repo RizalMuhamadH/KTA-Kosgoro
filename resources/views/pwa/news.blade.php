@@ -25,7 +25,7 @@
                             <div class="row">
                                 <div class="col s5">
                                     <div class="card-image">
-                                        <img src="https://app.kosgoro57.id/storage/article/{{$row->id}}/{{$row->thumbnail}}" onerror="this.src='https://app.kosgoro57.id/assets/pwa/img/img_default.png'">
+                                        <img src="https://app.kosgoro57.id/storage/article/{{$row->id}}/{{$row->thumbnail}}" style="height:10vh; display:block; width:100%; object-fit:cover" onerror="this.src='https://app.kosgoro57.id/assets/pwa/img/img_default.png'">
                                     </div>
                                 </div>
                                 <div class="col s7">
