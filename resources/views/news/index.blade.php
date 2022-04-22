@@ -86,6 +86,8 @@
 @push('custom_js')
     <script>
         $(document).ready(function(){
+            
+
             const type_article = "{{$type}}";
             var table_article = $(".table_article").DataTable({
                 destroy: true,
@@ -106,8 +108,13 @@
                     { data: "title" },
                     { data: "category.name"},
                     { data: "author.name"},
-                    { data: "created_at"},
-                    { data: "updated_at"},
+                    { data: "null",render:function(data,type,row){
+                        return convertDate(row.created_at)
+                    }},
+                    { data: "null",render:function(data,type,row){
+                        return convertDate(row.updated_at)
+                    }},
+                    
                     { data:  'null',render:function(data,type,row){
                         if(type_article != 3){
                             button_return = "<div class='btn-group'>";
@@ -209,6 +216,23 @@
                         
                     });
             })
+
+            function convertDate(custom_date){
+                var d = new Date(custom_date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+                    hour = d.getHours();
+                    minutes = d.getMinutes();
+                    second = d.getSeconds();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                tanggal =  [year, month, day].join('-');
+                jam = [hour, minutes, second].join(':');
+                return [tanggal, jam].join(' ');
+            }
         })
     </script>
 @endpush

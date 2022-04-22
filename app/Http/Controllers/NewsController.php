@@ -99,7 +99,7 @@ class NewsController extends Controller
         }
         $result['data'] = $tmp_query->where('status', $status)->with(['Category', 'Author' => function ($query) {
             return $query->select('id', 'name');
-        }])->get();
+        }])->orderBy('created_at','desc')->get();
         return response()->json($result, 200);
     }
 
@@ -258,7 +258,7 @@ class NewsController extends Controller
     {
         $news = News::with(['Category', 'Author' => function ($query) {
             return $query->select('id', 'name');
-        }])->where('status', 'Published')->get();
+        }])->where('status', 'Published')->orderBy('created_at','desc')->get();
         if ($news != null) {
             $response = [
                 'code'      =>  200,
@@ -281,7 +281,7 @@ class NewsController extends Controller
         $category = CategoryNews::where('slug', $request->category)->first();
         $news = News::where('category_id', $category->id)->with(['Category', 'Author' => function ($query) {
             return $query->select('id', 'name');
-        }])->where('status', 'Published')->get();
+        }])->where('status', 'Published')->orderBy('created_at','desc')->get();
         if ($news != null) {
             $response = [
                 'code'      =>  200,
