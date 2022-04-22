@@ -62,7 +62,7 @@
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <div class="form-group">
                                         <label> Source </label>
-                                        <input type="text" class="form-control @error('source') is-invalid @enderror" name="source" required minlength="10" maxlength="40" value="{{old('source', $data->description)}}">
+                                        <input type="text" class="form-control @error('source') is-invalid @enderror" name="source"  value="{{old('source', $data->description)}}">
                                         @error('source')
                                             <div class="alert alert-danger">
                                                 {{$message}}
@@ -73,7 +73,7 @@
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <div class="form-group">
                                         <label> Source Link </label>
-                                        <input type="url" class="form-control @error('source_link') is-invalid @enderror" name="source_link" required minlength="10" maxlength="40" value="{{old('source_link', $data->source_link)}}">
+                                        <input type="url" class="form-control @error('source_link') is-invalid @enderror" name="source_link"  value="{{old('source_link', $data->source_link)}}">
                                         @error('source_link')
                                             <div class="alert alert-danger">
                                                 {{$message}}

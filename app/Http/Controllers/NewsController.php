@@ -47,8 +47,6 @@ class NewsController extends Controller
             'title'         =>  'required|min:10|max:40',
             'description'   =>  'required|min:100|max:140',
             'body'          =>  'required',
-            'source'        =>  'required',
-            'source_link'   =>  'required|url',
             'featured'      =>  'required',
             'category'      =>  'required',
             'status'        =>  'required',
@@ -64,8 +62,8 @@ class NewsController extends Controller
         $article->title                     = $request->title;
         $article->description               = $request->description;
         $article->body                      = $request->body;
-        $article->source                    = $request->source;
-        $article->source_link               = $request->source_link;
+        $article->source                    = isset($request->source) ? $request->source : '';
+        $article->source_link               = isset($request->source_link) ? $request->source_link : '';
         $article->featured                  = $request->featured;
         $article->category_id               = $request->category;
         $article->user_id                   = Auth::user()->id;
@@ -156,8 +154,6 @@ class NewsController extends Controller
             'title'         =>  'required|min:10|max:40',
             'description'   =>  'required|min:100|max:140',
             'body'          =>  'required',
-            'source'        =>  'required',
-            'source_link'   =>  'required|url',
             'featured'      =>  'required',
             'category'      =>  'required',
             'status'        =>  'required',
@@ -174,8 +170,8 @@ class NewsController extends Controller
         $article->title                     = $request->title;
         $article->description               = $request->description;
         $article->body                      = $request->body;
-        $article->source                    = $request->source;
-        $article->source_link               = $request->source_link;
+        $article->source                    = isset($request->source) ? $request->source : '';
+        $article->source_link               = isset($request->source_link) ? $request->source_link : '';
         $article->featured                  = $request->featured;
         $article->category_id               = $request->category;
         $article->user_id                   = Auth::user()->id;
