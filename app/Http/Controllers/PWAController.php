@@ -71,7 +71,7 @@ class PWAController extends Controller
 
     public function news(){
         return view('pwa.news',[
-            'news'  => News::with(['Category','Author'])->orderBy('created_at')->paginate(10)
+            'news'  => News::with(['Category','Author'])->where('status','Published')->orderBy('created_at','desc')->paginate(10)
         ]);
     }
 
@@ -103,7 +103,7 @@ class PWAController extends Controller
 
     public function events(){
         return view('pwa.events',[
-            'events'  => Events::with(['Category','Author'])->orderBy('created_at')->paginate(10)
+            'events'  => Events::with(['Category','Author'])->orderBy('created_at','desc')->paginate(10)
         ]);
     }
 
